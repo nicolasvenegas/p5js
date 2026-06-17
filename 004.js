@@ -1,32 +1,41 @@
-// Dos vertexes reflejados aleatorios en cuadrícula centrada - Orientación vertical (gema)
+// Piedras lisas para taguitas - Con vértices suavizados
 
 let intervalo;
+let table;
 
 function preload() {
   table = loadTable("colors.csv", "csv", "header");
 }
 
-
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  background(255);
+  background(125);
   colorMode(HSB, 360, 100, 100, 255);
   
   dibujo();
-  intervalo = setInterval(dibujo, 2000);
+  intervalo = setInterval(dibujo, 30000);
 }
 
+// Piedras súper suaves - 8 vértices por lado
+
 function dibujo() {
-  background(360,0,50);
   palette = floor(random(21));
   
-  let filas = 12;
-  let columnas = 20;
-  let espaciadoY = height / filas;
-  let espaciadoX = width / columnas;
+  blendMode(BLEND);
+  background(0);
+  //blendMode(MULTIPLY);
   
+  let margen = 100;
+  let areaWidth = width - margen;
+  let areaHeight = height - margen;
   
-  strokeWeight(0.5);
+  let filas = 60;
+  let columnas = 62;
+  
+  let espaciadoY = areaHeight / filas;
+  let espaciadoX = areaWidth / columnas;
+  
+  strokeWeight(0.1);
   
   push();
   translate(width/2, height/2);
@@ -36,41 +45,68 @@ function dibujo() {
       let yOffset = (i - filas/2) * espaciadoY + espaciadoY/2;
       let xOffset = (j - columnas/2) * espaciadoX + espaciadoX/2;
       
-      // Coordenadas RELATIVAS al tamaño de la celda
-      let x1 = -espaciadoX * 0.45;  // Izquierda de la celda
-      let y1 = 0;
-      let x4 = espaciadoX * 0.45;   // Derecha de la celda
-      let y4 = 0;
+      let ancho = espaciadoX * random(0.2, 0.5);
+      let alto = espaciadoY * random(0.2, 0.5);
       
-      // Puntos aleatorios dentro de la celda
-      let x2 = random(-espaciadoX * 0.3, -espaciadoX * 0.05);
-      let y2 = random(espaciadoY * 0.1, espaciadoY * 0.45);
-      let x3 = random(espaciadoX * 0.1, espaciadoX * 0.3);
-      let y3 = random(espaciadoY * 0.05, espaciadoY * 0.45);
+      let x1 = -ancho * random(0.9, 1);
+      let y1 = random(-alto , alto )* random(0.9, 1);
+      let x4 = ancho * random(0.5, 1.0);
+      let y4 = random(-alto, alto)* random(0.9, 1);
       
-      noStroke();
+      // 8 VÉRTICES SUPERIORES (distribución uniforme)
+      let puntosSuperior = [];
+      let puntosInferior = [];
+      
+      // Generar 8 puntos en forma de curva suave
+      for (let k = 0; k < 20; k++) {
+        let t = (k + 0.5) / 100; // 0 a 1
+        let x = (t - 0.5) * 2 * ancho;
+        let y = Math.sin(t * PI) * alto;
+        
+        // Añadir pequeña variación para naturalidad
+        let variacionX = random(0.75, 0.9);
+        let variacionY = random(0.75, 0.9);
+        
+        puntosSuperior.push({
+          x: x * variacionX,
+          y: y * variacionY
+        });
+        
+        puntosInferior.push({
+          x: x * variacionX,
+          y: y * variacionY
+        });
+      }
+      
       col = floor(random(5));
       getColor(col);
-      fill(h, s, b, 255);
-      
+      fill(h, s, b);
+      //stroke(h, s, b);
       push();
       translate(xOffset, yOffset);
       
-      // Línea superior
+      // LÍNEA SUPERIOR con 8 puntos
       beginShape();
       vertex(x1, y1);
-      vertex(x2, y2);
-      vertex(x3, y3);
+      for (let p of puntosSuperior) {
+        vertex(p.x, -p.y);
+      }
       vertex(x4, y4);
       endShape();
+
+      col1 = floor(random(5));
+      getColor(col1);
       
-      // Línea inferior (reflejada en Y)
+      // LÍNEA INFERIOR con 8 puntos
       beginShape();
       vertex(x1, y1);
-      vertex(x2, -y2);
-      vertex(x3, -y3);
+      for (let p of puntosInferior) {
+        vertex(p.x, p.y);
+      }
       vertex(x4, y4);
       endShape();
+
+      line()
       
       pop();
     }
@@ -78,7 +114,6 @@ function dibujo() {
   
   pop();
 }
-
 
 function getColor(col1) {
   h = int(table.get(palette, col1 * 3));
