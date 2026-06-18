@@ -68,7 +68,7 @@ function dibujar() {
       let anguloRotacion = random(-180, 180);
       let tamanioX = gridX * random(0.25, 0.9);
       let tamanioY = gridY * random(0.25, 0.9);
-
+      
       push();
       // mover al centro del módulo
       translate(x + gridX / 2, y + gridY / 2);
