@@ -9,7 +9,7 @@ function setup() {
   frameRate(60);
   noLoop();
   dibujar();
-  setInterval(dibujar, 50000);
+  setInterval(dibujar, 10000);
 }
 
 function dibujar() {
@@ -40,7 +40,7 @@ function dibujar() {
       selectShape = random(3);
       if (selectShape < 0) {
         //rect(x, y, grid);
-      } else if (selectShape < 2.75) {
+      } else if (selectShape < 1) {
           ellipse(x, y, grid * 0.15);
       } else {
         triangle(x-grid/2,y-grid/3,x-grid/2,y+grid/3,x+grid/6,y);

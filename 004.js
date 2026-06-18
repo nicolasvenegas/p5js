@@ -29,8 +29,8 @@ function dibujo() {
   let areaWidth = width - margen;
   let areaHeight = height - margen;
   
-  let filas = 60;
-  let columnas = 62;
+  let filas = 10;
+  let columnas = 12;
   
   let espaciadoY = areaHeight / filas;
   let espaciadoX = areaWidth / columnas;
