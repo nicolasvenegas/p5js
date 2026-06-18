@@ -1,3 +1,4 @@
+
 // carga de data colores
 function preload() {
   table = loadTable("colors.csv", "csv", "header");
@@ -8,10 +9,10 @@ function setup() {
   colorMode(HSB, 360, 100, 100, 255);
   rectMode(CENTER);
   angleMode(DEGREES);
-  //noStroke();
+  noStroke();
   strokeWeight(0.5);
   noLoop();
-  //setInterval(dibujar, 1000);
+  //setInterval(dibujar, 5000);
   //frameRate(120);
 }
 
@@ -25,9 +26,9 @@ function dibujar() {
   randomSeed(seed);
 
   // selecciona una paleta, total de filas en colors.csv menos 1
-  palette = floor(random(22));
+  palette = floor(random(20));
   // borde del lienzo
-  frame = 0;
+  frame = 100;
   // defino variables para el numero de filas y columnas 
   numAcrossX = 80;
   numAcrossY = 45;
@@ -66,9 +67,9 @@ function dibujar() {
 
       // Cada módulo tiene su propia rotación
       let anguloRotacion = random(-180, 180);
-      let tamanioX = gridX * random(0.25, 0.9);
-      let tamanioY = gridY * random(0.25, 0.9);
-      
+      let tamanioX = gridX * random(0.25, 0.8);
+      let tamanioY = gridY * random(0.25, 0.8);
+
       push();
       // mover al centro del módulo
       translate(x + gridX / 2, y + gridY / 2);
@@ -81,9 +82,12 @@ function dibujar() {
       selectShape = random(3);
 
       if (selectShape < 1) {
-        rect(0, 0, tamanioX, tamanioY);
+        //rect(0, 0, tamanioX, tamanioY);
+        stroke(0,50);
+        strokeWeight(3);
+        point(0,0);
       } else if (selectShape < 2) {
-        ellipse(0, 0, tamanioX, tamanioX);
+        ellipse(0, 0, tamanioX, tamanioY);
       } else {
         let tamañoTri = tamanioY;
         triangle(-tamañoTri / 2, -tamañoTri / 2, -tamañoTri / 2, tamañoTri / 2, tamañoTri / 2, 0);
@@ -92,7 +96,7 @@ function dibujar() {
       pop();
     }
   }
-  print("paleta " + palette + " semilla " + seed + " columna " + col);
+  print("paleta " + palette + " semilla " + seed );
 }
 
 function getColor(col1) {
