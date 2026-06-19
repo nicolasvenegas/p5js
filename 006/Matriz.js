@@ -1,28 +1,5 @@
-let slideX = 0;
-let rotateAngle = 0;
-
-// carga de data colores
-function preload() {
-  table = loadTable("colors.csv", "csv", "header");
-}
-
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-  colorMode(HSB, 360, 100, 100, 255);
-  rectMode(CENTER);
-  angleMode(DEGREES);
-  noLoop();
-  setInterval(matrizBase, 100000);
-  slider = createSlider(0, 100, 50);
-}
-
-function draw() {
-  matrizBase();
-}
-
-
 class Matriz {
-  constructor(numAcrossX, numAcrossY, frame, offsetX, offsetY, rez1, rez2) {
+  constructor(numAcrossX, numAcrossY, frame, offsetX, offsetY, rez1, rez2, seed) {
     this.numAcrossX = numAcrossX;
     this.numAcrossY = numAcrossY;
     this.frame = frame;
@@ -36,6 +13,7 @@ class Matriz {
     this.palette = floor(random(20));
     this.coloresDisponibles = [];
     this.puntos = [];
+    this.seed = seed !== undefined ? seed : floor(random(1000000));
   }
 
   // Configurar colores
@@ -63,7 +41,7 @@ class Matriz {
           y: y + this.gridY / 2 + this.offsetY,
           colorIndex: floor(random(this.coloresDisponibles.length)),
           n1: noise(x * this.rez1, y * this.rez1) + 0.3,
-          n2: noise(x * this.rez2 + 100, y * this.rez2 + 100),
+          n2: noise(x * this.rez2 * 0.1, y * this.rez2 *0.16),
           selectShape: random(3)
         });
       }
@@ -75,7 +53,7 @@ class Matriz {
     for (let p of this.puntos) {
       let nCombinado = (p.n1 + p.n2) / 2;
       let nColor = floor(map(nCombinado, 0.43, 0.52, 0, 1));
-      let nSizeEllipse = floor(map(nCombinado, 0.05, 0.2, 0., 1));
+      let nSizeEllipse = floor(map(nCombinado, 0.05, 0.2, 0, 1));
       let nsAng = floor(map(p.n1, 0, 1, 0, 360));
 
       getColor(this.palette, nColor);
@@ -86,6 +64,7 @@ class Matriz {
       push();
       translate(p.x, p.y);
       rotate(anguloRotacion);
+      blendMode(ADD);
       fill(h, s, b, 255);
       noStroke();
       ellipse(0, 0, tamanioEllipse);
@@ -100,26 +79,4 @@ class Matriz {
     this.dibujar();
     print("paleta " + this.palette + " semilla " + this.seed);
   }
-}
-
-function matrizBase() {
-  // Limpiar fondo UNA SOLA VEZ
-  background(0);
-  //blendMode( INVERT);
-
-  let matriz1 = new Matriz(120, 120, 0, 0, 0, 0.01, 0.002);
-  matriz1.run();
-
-  let matriz2 = new Matriz(120, 180, 0, 7, 0, 0.05, 0.007);
-  matriz2.run();
-
-  let matriz3 = new Matriz(120, 60, 0, 7, 0, 0.08, 0.007);
-  matriz3.run();
-
-}
-
-function getColor(palette, col1) {
-  h = int(table.get(palette, col1 * 3));
-  s = int(table.get(palette, col1 * 3 + 1));
-  b = int(table.get(palette, col1 * 3 + 2));
 }
