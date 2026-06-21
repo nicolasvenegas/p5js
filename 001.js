@@ -1,60 +1,78 @@
+// precarga de CSV c/tablas de colores. 
+// Cada fila son 5 colores H,S,B, H,S,B, H,S,B, H,S,B, H,S,B
 function preload() {
   table = loadTable("colors.csv", "csv", "header");
 }
 
 function setup() {
+  // lienzo del tamaño de la ventana
   createCanvas(windowWidth, windowHeight);
+  // Modo de color HSB
   colorMode(HSB, 360, 100, 100, 255);
+  // punto de anclaje primitiva rect
   rectMode(CENTER);
-  frameRate(60);
+  // intervalo de reproducción de la funcion dibujar en milisegundos
   noLoop();
-  dibujar();
-  setInterval(dibujar, 5000);
+  setInterval(dibujar, 100000);
+
+  strokeWeight(0);
 }
 
+function draw() {
+  dibujar();
+}
+
+
+
 function dibujar() {
+  background(75);
+
+  // selector de semillas
   seed = floor(random(10000));
   randomSeed(seed);
-
-  strokeWeight(1);
-  stockColor = 9;
-  palette = floor(random(21));
-  frame = 100;
-  numAcross = 80;
-  grid = (width - frame) / numAcross;
-  //noStroke();
-  count = 0;
-  // while (count < 1000) {
-  //   getColor(floor(random(5)));
-  //   fill(h, s, b, 255);
-  //   rect(random(width), random(height), 30);
-  //   count++;
-  // }
-  newCol = 0;
-  background(75);
-  for (x = frame; x < width - frame; x += grid) {
-    for (y = frame; y < height - frame; y += grid) {
-      col = floor(random(5));
-      getColor(col);
+  print(" semilla: " + seed );
+  // guarda en la variable paleta una de las fillas del CSV
+  paleta = floor(random(21));
+  // variable para el marco exterior
+  marco = 50;
+  // numero de separaciones 
+  separaciones = 120;
+// la celda mide el alto de la pantalla menos el marco, 
+// dividido en el numero de separaciones
+  cell = (width - marco) / separaciones;
+  // variable para guardar color de la elipse
+  colElipse = 0;
+  // loop para construir reticula X / Y
+  // se repite cell desde el valor del marco, toda la pantalla hasta menos el marco
+  for (x = marco; x < width - marco; x += cell) {
+    for (y = marco; y < height - marco; y += cell) {
+      // variable para guardar el color de la celda
+      colBg = floor(random(5));
+      // lo defino a traves de la funcion getColor
+      getColor(colBg);
+      // pinto
       fill(h, s, b, 255);
-      displace1 = frameCount + random(-50,50);
-      displace2 = frameCount + random(-50,50);
-      rDisplace = random(0.4, 1.17);
-      rect(x, y, grid);
-      while (col == newCol) {
-        newCol = floor(random(5));
+      // en la posicion X / Y del loop, le doy el tamaño de celda
+      rect(x, y, cell);
+      // si el color del BG es igual al color de la elipse
+      // vuelvo a coger un nro aleatorio entre 0 y 4 (cino colores en cada paleta)
+      while (colBg == colElipse) {
+        colElipse = floor(random(5));
       }
-      getColor(newCol);
-      fill(h, s, b, 255);
-      cellSize = random(grid*0.25,grid*0.8);
+      // redefino a través de la propiedad de getColor y pinto
+      getColor(colElipse);
+fill(h, s, b, 255);
+      cellSize = random(cell * 0.25, cell * 0.8);
+      
       circle(x, y, cellSize);
     }
   }
-  print("paleta " + palette + " semilla " + seed + " columna " + col);
+  
 }
 
-function getColor(col1) {
-  h = int(table.get(palette, col1 * 3));
-  s = int(table.get(palette, col1 * 3 + 1));
-  b = int(table.get(palette, col1 * 3 + 2));
+
+function getColor(colBg) {
+  h = int(table.get(paleta, colBg * 3));
+  s = int(table.get(paleta, colBg * 3 + 1));
+  b = int(table.get(paleta, colBg * 3 + 2));
 }
