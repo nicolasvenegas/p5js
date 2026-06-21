@@ -48,61 +48,48 @@ function setup() {
         color(110, 80, 50),
         color(270, 80, 60),
     ];
-    noLoop();
-    //frameRate(3);
+    //noLoop();
+    frameRate(3);
     angleMode(DEGREES);
     rectMode(CENTER);
 }
 
 function draw() {
     background(255)
-    for (x = 0; x < width; x++) {
-        for (y = 0; y < height; i++) {
-            perimetral();
-            hexagono(0, 0, 60, 0);
-            lineas();
-        }
-    }
-
+    //guias();
+    lineasSeg(width/2,height/2);
+    perimetral(width/2,height/2);
 }
 
-function perimetral() {
-    const colorPerimetral = selectorCol();
-    const valorPerimetral = selectorVal();
-    const tamPerimetral = selectorTam();
 
-    noFill();
-    strokeWeight(valorPerimetral);
-    stroke(colorPerimetral);
+
+function perimetral(x = 0, y = 0) {
+    const truePerimetral = selectorPerimetral();
     push();
-    translate(width / 2, height / 2);
-    ellipse(0, 0, tamPerimetral * 2);
+    translate(x,y);
+    if (truePerimetral === 0) {
+        hexagono(0, 0);
+    } else if (truePerimetral === 1) {
+        esfera(0, 0);
+    } else {
+        cuadrado(0, 0);
+    }
     pop();
 }
 
-function hexagono(x, y, radio) {
-    const colorHexagono = selectorCol();
-    const valorHexagono = selectorVal();
-    const tamHexagono = selectorTam();
-    const angHexagono = selectorAng();
 
-    noFill();
-    strokeWeight(valorHexagono);
-    strokeWeight(valorHexagono);
-    stroke(colorHexagono);
-    push();
-    translate(width / 2, height / 2);
-    rotate(angHexagono);
-    beginShape();
-    for (let i = 0; i < 6; i++) {
-        let angulo = 360 / 6 * i;
-        vertex(x + tamHexagono * cos(angulo), y + tamHexagono * sin(angulo));
+function lineasSeg(x = 0, y = 0) {
+    const linDivisiones = 3;
+    const linPasos = selectorTrozos();
+    const linPaso = (OBJ / 3) / linPasos;
+    let linInicio = floor(random(0, linPasos));
+    let linFinal = floor(random(linInicio, linPasos + 1));
+
+    while (linFinal - linInicio < 2) {
+        linInicio = floor(random(0, linPasos - 1));
+        linFinal = floor(random(linInicio + 2, linPasos + 1));
     }
-    endShape(CLOSE);
-    pop();
-}
 
-function lineas() {
     let numFormas = selectorTrozos();
     const colorLineas = selectorCol();
     const valorLineas = selectorVal();
@@ -113,47 +100,17 @@ function lineas() {
     strokeWeight(valorLineas);
     stroke(colorLineas);
     push();
-    translate(width / 2, height / 2);
+    translate(x,y);
     rotate(angLineas);
     stroke(colorLineas);
     const angle = 360 / numFormas;
     for (let i = 0; i < numFormas; i++) {
-        line(0, 0, 0, tamLineas);
+        line(linInicio * linPaso, 0, linFinal * linPaso, 0);
         rotate(angle);
     }
     pop();
+    print(linPasos)
 }
 
 
 
-
-
-function selectorTrozos() {
-    const opciones = [6, 9, 12, 18, 24];
-    const i = floor(random(opciones.length));
-    return opciones[i];
-}
-
-function selectorVal() {
-    /*  const opciones = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-     const i = floor(random(opciones.length)); 
-     return opciones[i]; */
-    return floor(random(4, 4));
-
-}
-
-function selectorTam() {
-    /* const opciones = [width / 4, width / 5, width / 6, width / 7, width / 8];
-    const i = floor(random(opciones.length)); 
-    return opciones[i]; */
-    return floor(random(width / 8, width / 4));
-
-}
-function selectorCol() {
-    const azarColor = floor(random(0, PALETA.length));
-    return PALETA[azarColor];
-}
-
-function selectorAng() {
-    return floor(random(360));
-}
