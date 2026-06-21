@@ -56,11 +56,11 @@ function setup() {
 
 function draw() {
     background(255)
-    for(x = 0; x < width; x++){
-        for(y = 0; y< height; i++){
+    for (x = 0; x < width; x++) {
+        for (y = 0; y < height; i++) {
             perimetral();
-    hexagono(0, 0, 60, 0);
-    lineas();
+            hexagono(0, 0, 60, 0);
+            lineas();
         }
     }
 
