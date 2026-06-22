@@ -104,28 +104,32 @@ class Lineas extends Capa {
         }
         pop();
     }
-    
+
 }
 
 
 
 class Ojo {
-    constructor(ancho,alto,posX,posY) {
+    constructor(ancho, alto, posX, posY) {
         this.ancho = ancho;
         this.alto = alto;
         this.posX = posX;
         this.posY = posY;
-        
     }
     render() {
+        fill("#ffffffe0");
         push();
-    translate(x, y);
-    beginShape();
-    vertex(ancho/2, 0);
-    bezierVertex(this.ancho/4, -this.alto/2, -this.ancho/4, -this.alto/2, -this.ancho/2, 0);
-    bezierVertex(-this.ancho/4, this.alto/2, this.ancho/4, this.alto/2, this.ancho/2, 0);
-    endShape(CLOSE);
-    pop();
+        translate(width / 2, height / 2);
+        beginShape();
+        vertex(this.ancho / 2, 0);
+        bezierVertex(this.ancho / 4, -this.alto / 2, -this.ancho / 4, -this.alto / 2, -this.ancho / 2, 0);
+        bezierVertex(-this.ancho / 4, this.alto / 2, this.ancho / 4, this.alto / 2, this.ancho / 2, 0);
+        endShape(CLOSE);
+        fill("#000000e0");
+        noStroke();
+        ellipse(0,0,37);
+        pop();
+        noFill();
     }
 }
 

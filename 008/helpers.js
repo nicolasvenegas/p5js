@@ -30,7 +30,7 @@ function selectorVal() {
     const i = floor(random(opciones.length)); 
     return opciones[i]; */
     //return floor(random(1, 3));
-    return 2;
+    return 1.2;
 }
 function selectorTam() {
     /* const opciones = [width / 4, width / 5, width / 6, width / 7, width / 8];

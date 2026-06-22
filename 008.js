@@ -21,22 +21,27 @@ function setup() {
     ellipseMode(CENTER);
     noFill();
     smooth(1);
-    setInterval(draw,50000);
+    setInterval(draw,200);
 }
 
 function draw() {
     background(0,0,0,255);
-    capas.length = 0; 
+    
     
     const C1 = new Circulos(selectorVal(), selectorTam());
     const H1 = new Hexagono(selectorVal(), selectorTam());
     const E1 = new Esfera(selectorVal(), selectorTam());
     const L1 = new Lineas(selectorVal(), selectorTam());
+    const O1 = new Ojo(100,55,0,0);
     C1.render();
     H1.render();
     E1.render();
     L1.render();
-/*     let selector = random(1);
+    O1.render();
+    
+/*  
+    capas.length = 0; 
+    let selector = random(1);
     if(selector > 0.3){
         capas.push(new Circulos(selectorVal(), selectorTam()));
     }
