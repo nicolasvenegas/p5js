@@ -150,8 +150,8 @@ class Meandro {
     render() {
         // Obtener color
         getColor(this.paleta, this.colMeandro);
-        stroke(h, 100, 7, 255);
-        strokeWeight(selectorVal());
+        stroke(h, 100, 27, 255);
+        strokeWeight(selectorVal()/2);
         noFill();
 
         beginShape();
