@@ -3,7 +3,10 @@ let gama = 0;
 let table;
 const OBJ = 300;
 const TROZOS = 6;
+let contadorSvg = 0;
+
 const capas = [];
+
 
 function preload() {
     table = loadTable("colors.csv", "csv", "header");
@@ -15,57 +18,42 @@ function setup() {
     //createCanvas(600, 600, SVG);
     colorMode(HSB, 360, 100, 100, 255);
     noLoop();
-    //frameRate(3);
+    frameRate(12);
     angleMode(DEGREES);
     rectMode(CENTER);
     ellipseMode(CENTER);
     noFill();
     smooth(1);
-    setInterval(draw,200);
+    setInterval(draw, 10000);
 }
 
 function draw() {
-    background(0,0,0,255);
+    background(0, 0, 0, 255);
+
+    const capas = []; 
+    constructorCapas.forEach(lcon => {
+        let picker = random(1);
+        if(picker < lcon.weight){
+            capas.push(lcon.init())
+        }
+    })
+    capas.forEach(capa => {
+        capa.render();
+        print(capa)
+    })
+       
     
-    
-    const C1 = new Circulos(selectorVal(), selectorTam());
-    const H1 = new Hexagono(selectorVal(), selectorTam());
-    const E1 = new Esfera(selectorVal(), selectorTam());
-    const L1 = new Lineas(selectorVal(), selectorTam());
-    const O1 = new Ojo(100,55,0,0);
-    C1.render();
-    H1.render();
-    E1.render();
-    L1.render();
-    O1.render();
-    
-/*  
-    capas.length = 0; 
-    let selector = random(1);
-    if(selector > 0.3){
-        capas.push(new Circulos(selectorVal(), selectorTam()));
-    }
-    selector = random(1);
-    if(selector > 0.3){
-        capas.push(new Hexagono(selectorVal(), selectorTam()));
-    }
-    selector = random(1);
-    if(selector > 0.3){
-        capas.push(new Esfera(selectorVal(), selectorTam()));
-    }
-    selector = random(1);
-    if(selector > 0.3){
-        capas.push(new Lineas(selectorVal(), selectorTam()));
-    }
-    if(selector > 0.3){
-        capas.push(new Ojo(100,50,0,0));
-    }
-    capas.forEach(capasPrint => {
-        capasPrint.render();
-    }) */
 }
 
 
 
 
 
+function keyPressed(){
+    
+    if(key == 's'){
+        contadorSvg++;
+        let nombreSvg = 'exportaciones/' + 'out' + nf(contadorSvg, 3) + '.svg';
+        save(nombreSvg);
+    }
+}

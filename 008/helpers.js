@@ -1,3 +1,50 @@
+const ojoObj = OBJ / 3;
+
+const constructorCapas = [
+    {
+        name: 'Meandro1',
+        init: () => new Meandro(),
+        weight: 1
+    },
+    {
+        name: 'Circulos',
+        init: () => new Circulos(selectorVal(), selectorTam() * 0.8, selectorLados()),
+        weight: 0.55
+    },
+    {
+        name: 'Hexagono',
+        init: () => new Hexagono(selectorVal(), selectorTam(), selectorLados()),
+        weight: 0.45
+    },
+    {
+        name: 'Esfera',
+        init: () => new Esfera(selectorVal(), selectorTam()),
+        weight: 0.4
+    },
+    {
+        name: 'Lineas',
+        init: () => new Lineas(selectorVal(), selectorTam()),
+        weight: 0.5
+    },
+    {
+        name: 'LineaDiscontinua',
+        init: () => new LineaDiscontinua(selectorVal(), selectorTam(), selectorLados()),
+        weight: 0.55
+    },
+    {
+        name: 'Ojo 1',
+        init: () => new Ojo(ojoObj, ojoObj * 0.65, 0, ojoObj * 0.3),
+        weight: 1
+    },
+    {
+        name: 'Ojo 2',
+        init: () => new Ojo(ojoObj, ojoObj * 0.65, 0, ojoObj * -0.3),
+        weight: 1
+    }
+]
+
+
+
 function selectorAzar() {
     const azarValor = noise(1);
     if (azarValor > 0.5) {
@@ -8,13 +55,13 @@ function selectorAzar() {
 }
 
 function selectorLados() {
-    const opciones = [2, 4, 6, 8,12];
+    const opciones = [3, 4, 5, 6, 8, 12];
     const i = floor(random(opciones.length));
     return opciones[i];
 }
 
 function selectorFig() {
-    const opciones = [4];
+    const opciones = [3, 4, 5, 6, 8, 12];
     const i = floor(random(opciones.length));
     return opciones[i];
 }
@@ -26,23 +73,33 @@ function selectorTrozos() {
 }
 
 function selectorVal() {
-    /*  const opciones = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    const i = floor(random(opciones.length)); 
-    return opciones[i]; */
-    //return floor(random(1, 3));
+    //  return random([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    //return floor(random(1, 2));
     return 1.2;
 }
+
 function selectorTam() {
     /* const opciones = [width / 4, width / 5, width / 6, width / 7, width / 8];
     const i = floor(random(opciones.length)); 
     return opciones[i]; */
-    return floor(random(height*0.25,height*0.4));
+    return floor(random(OBJ * 0.75, OBJ * 0.9));
 
 }
+
+function selectorTamLin() {
+    const opciones = [2];
+    const i = floor(random(opciones.length));
+    return opciones[i];
+    //return floor(random(2,2));
+
+}
+
 function selectorAng() {
     const opciones = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360];
-    const i = floor(random(360)); //(random(opciones.length));
+    //const i = floor(random(360)); 
+    const i = floor(random(opciones.length));
     return opciones[i];
+    //return i;
 }
 
 function selectorPerimetral() {
@@ -50,6 +107,7 @@ function selectorPerimetral() {
     const i = floor(random(opciones.length));
     return opciones[i];
 }
+
 function guias() {
     let numFormas = 48;
     const valorLineas = 1;
@@ -67,7 +125,6 @@ function guias() {
     }
     pop();
 }
-
 
 function getColor(gama, colSelect) {
     h = int(table.get(gama, colSelect * 3));

@@ -19,7 +19,7 @@ function setup() {
   let m1 = new Meandro(random(width), random(height), width * din, din);
   meandros.push(m1);
 
-    let m2 = new Meandro(random(width), random(height), width * din, din);
+/*     let m2 = new Meandro(random(width), random(height), width * din, din);
   meandros.push(m2);
 
 let m3 = new Meandro(random(width), random(height), width * din, din);
@@ -29,7 +29,7 @@ let m3 = new Meandro(random(width), random(height), width * din, din);
   meandros.push(m4);
 
   let m5 = new Meandro(random(width), random(height), width * din, din);
-  meandros.push(m5);
+  meandros.push(m5); */
 
 
 

@@ -6,7 +6,7 @@ class Meandro {
     this.len = len || width * 0.01;
     this.paleta = paleta !== undefined ? paleta : floor(random(21));
     this.colMeandro = colMeandro !== undefined ? colMeandro : floor(random(5));
-    this.margen = margen || 10;
+    this.margen = margen || 100;
     this.puntos = [];
     this.generarPuntos();
   }
