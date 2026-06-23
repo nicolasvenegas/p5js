@@ -1,5 +1,7 @@
 class Capa {
-    constructor(valorLinea, tam, lados) {
+    constructor(valorLinea, tam, lados, posX, posY) {
+        this.posX = posX || OBJ / 2;
+        this.posY = posY || OBJ / 2;
         this.valorLinea = valorLinea > 0 ? valorLinea : selectorVal();
         this.lados = lados > 0 ? lados : selectorLados();
         this.tam = tam > 0 ? tam : selectorTam();
@@ -24,7 +26,7 @@ class Circulos extends Capa {
         strokeWeight(this.valorLinea);
         stroke(this.colorLinea);
         push();
-        translate(width / 2, height / 2);
+        translate(this.posX, this.posY);
         for (let i = 0; i < this.lados; i++) {
             ellipse(this.pos, 0, this.tam);
             rotate(this.ang);
@@ -42,7 +44,7 @@ class Hexagono extends Capa {
         strokeWeight(this.valorLinea);
         stroke(this.colorLinea);
         push();
-        translate(width / 2, height / 2);
+        translate(this.posX, this.posY);
         rotate(this.ang);
         beginShape();
         for (let i = 0; i < this.lados; i++) {
@@ -64,7 +66,7 @@ class Esfera extends Capa {
         strokeWeight(this.valorLinea);
         //stroke(colorEsfera);
         push();
-        translate(width / 2, height / 2);
+        translate(this.posX, this.posY);
         ellipse(0, 0, this.tam);
         pop();
     }
@@ -95,7 +97,7 @@ class Lineas extends Capa {
         strokeWeight(this.valorLinea);
         stroke(this.colorLinea);
         push();
-        translate(width / 2, height / 2);
+        translate(this.posX, this.posY);
         rotate(this.ang);
         for (let i = 0; i < this.numFormas; i++) {
             line(this.linInicio * this.linPaso, 0, this.linFinal * this.linPaso, 0);
@@ -106,18 +108,21 @@ class Lineas extends Capa {
 }
 
 class Meandro {
-    constructor(posX, posY, len, ang, paleta, colMeandro, margen, angFactorX, angFactorY) {
-        this.x = posX || width / 2;
-        this.y = posY || height / 2;
+    constructor(posX, posY, len, ang, paleta, colMeandro, margen, angFactorX, angFactorY, segmentos) {
+        this.x = posX || OBJ / 2;
+        this.y = posY || OBJ / 2;
         this.ang = ang || random(PI * 2);
-        this.angFactorX = angFactorX || 0.11;
-        this.angFactorY = angFactorY || 0.24;
-        this.len = len || width * 0.01;
+        this.angFactorX = angFactorX > 0 ? angFactorX : selectorFactorAngX();
+        this.angFactorY = angFactorY > 0 ? angFactorY : selectorFactorAngY();
+        this.segmentos = selectorSegmentos();
+        this.len = len || width * 0.009;
         this.paleta = paleta !== undefined ? paleta : floor(random(21));
         this.colMeandro = colMeandro !== undefined ? colMeandro : floor(random(5));
         this.margen = margen || 1;
         this.puntos = [];
         this.generarPuntos();
+
+
     }
 
     generarPuntos() {
@@ -126,13 +131,13 @@ class Meandro {
         let y = this.y;
         let ang = this.ang;
 
-        for (let i = 0; i < 5000; i++) {
+        for (let i = 0; i < this.segmentos; i++) {
             let newX = cos(ang) * this.len + x;
             let newY = sin(ang) * this.len + y;
 
             // Limitar dentro de la pantalla
-            newX = constrain(newX, this.margen, width - this.margen);
-            newY = constrain(newY, this.margen, height - this.margen);
+            newX = constrain(newX, this.margen, OBJ - this.margen);
+            newY = constrain(newY, this.margen, OBJ - this.margen);
 
             this.puntos.push({ x: newX, y: newY });
 
@@ -150,8 +155,8 @@ class Meandro {
     render() {
         // Obtener color
         getColor(this.paleta, this.colMeandro);
-        stroke(h, 100, 27, 255);
-        strokeWeight(selectorVal()/2);
+        stroke(h, 100, 127, 255);
+        strokeWeight(selectorVal());
         noFill();
 
         beginShape();
@@ -159,6 +164,7 @@ class Meandro {
             curveVertex(this.puntos[i].x, this.puntos[i].y);
         }
         endShape();
+
     }
 
     // Método para regenerar con nuevos parámetros
@@ -178,7 +184,7 @@ class LineaDiscontinua extends Capa {
         fill(this.colorLinea);
         noStroke();
         push();
-        translate(width / 2, height / 2);
+        translate(this.posX, this.posY);
         for (let i = 0; i < this.lados; i++) {
             for (let x = this.paso; x < OBJ * 0.5; x += this.paso) {
                 // Rectángulos más visibles
@@ -193,26 +199,44 @@ class LineaDiscontinua extends Capa {
 
 
 class Ojo {
-    constructor(ancho, alto, posX, posY) {
+    constructor(ancho, alto, posX, posY, paleta, colOjo, colPupila) {
         this.ancho = ancho;
         this.alto = alto;
-        this.posX = posX;
-        this.posY = posY;
-        this.colPupila = 0;
+        this.posX = posX || 0;
+        this.posY = posY || 0;
+        this.paleta = paleta !== undefined ? paleta : floor(random(21));
+        // Asignar color del ojo
+        this.colOjo = colOjo !== undefined ? colOjo : floor(random(5));
+
+        // Asignar color de pupila (diferente al del ojo)
+        if (colPupila !== undefined) {
+            this.colPupila = colPupila;
+        } else {
+            do {
+                this.colPupila = floor(random(5));
+            } while (this.colPupila === this.colOjo);
+        }
+
+        // Obtener los colores
+        this.colorOjo = getColor(this.paleta, this.colOjo);
+        this.colorPupila = getColor(this.paleta, this.colPupila);
     }
     render() {
-        fill("#ffffff");
+
+        getColor(this.paleta, this.colOjo);
+        fill(this.colorOjo.h, this.colorOjo.s, this.colorOjo.b, 255);
         noStroke();
         push();
-        translate(width / 2 + this.posX, height / 2 + this.posY);
+        translate(OBJ / 2 + this.posX, OBJ / 2 + this.posY);
         beginShape(); // estudiar
         vertex(this.ancho / 2, 0);
         bezierVertex(this.ancho / 4, -this.alto / 2, -this.ancho / 4, -this.alto / 2, -this.ancho / 2, 0);
         bezierVertex(-this.ancho / 4, this.alto / 2, this.ancho / 4, this.alto / 2, this.ancho / 2, 0);
         endShape(CLOSE);
-        fill(this.colPupila);
+        getColor(this.paleta, this.colPupila);
+        fill(this.colorPupila.h, this.colorPupila.s, this.colorPupila.b, 255);
         noStroke();
-        ellipse(0, 0, 35);
+        ellipse(0, 0, this.alto * 0.65);
         pop();
         noFill();
     }
