@@ -4,7 +4,7 @@
         {
             name: 'Meandro1',
             init: () => new Meandro(),
-            weight: 0.25
+            weight: 0.1
         },
         {
             name: 'Circulos',
@@ -14,7 +14,7 @@
         {
             name: 'Hexagono',
             init: () => new Hexagono(selectorVal(), selectorTam(), selectorLados()),
-            weight: 0.25
+            weight: 0.15
         },
         {
             name: 'Esfera',
@@ -24,12 +24,12 @@
         {
             name: 'Lineas',
             init: () => new Lineas(selectorVal(), selectorTam()),
-            weight: 0.25
+            weight: 0.15
         },
         {
             name: 'LineaDiscontinua',
             init: () => new LineaDiscontinua(selectorVal(), selectorTam(), selectorLados()),
-            weight: 0.25
+            weight: 0.15
         },
         {
             name: 'Ojo 1',

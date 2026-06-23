@@ -4,7 +4,7 @@ let table;
 let OBJ = 100;
 let contadorSvg = 0;
 
-let COLS = 7;
+let COLS = 8;
 let ROWS = 4;
 let OBJall = [];
 
@@ -22,22 +22,27 @@ function setup() {
     ellipseMode(CENTER);
     noFill();
     smooth(1);
-    setInterval(draw, 50000);
+    setInterval(draw, 100000);
     detectarOrientacion();
 }
 
 function draw() {
     background(0, 0, 0, 255);
     reticulado();
+/*     fill(255);
+    textSize(40);
+    textAlign(CENTER, CENTER)
+    text('texto',width/2,height/2);
+    noFill(); */
 }
 
 function detectarOrientacion() {
     if (width >= height) {
-        COLS = 7;
+        COLS = 8;
         ROWS = 4;
     } else {
         COLS = 4;
-        ROWS = 7;
+        ROWS = 8;
     }
 }
 
