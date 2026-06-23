@@ -28,7 +28,7 @@ function setup() {
     ellipseMode(CENTER);
     noFill();
     smooth(1);
-    setInterval(draw, 5000);
+    setInterval(draw, 50000);
 
 }
 
