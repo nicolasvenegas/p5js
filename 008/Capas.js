@@ -1,7 +1,7 @@
 class Capa {
     constructor(valorLinea, tam, lados, posX, posY) {
-        this.posX = posX || OBJ / 2;
-        this.posY = posY || OBJ / 2;
+                this.posX = posX !== undefined ? posX : 0;
+        this.posY = posY !== undefined ? posY : 0;
         this.valorLinea = valorLinea > 0 ? valorLinea : selectorVal();
         this.lados = lados > 0 ? lados : selectorLados();
         this.tam = tam > 0 ? tam : selectorTam();
@@ -16,6 +16,7 @@ class Capa {
         this.colorObj = getColor(this.gama, this.colSelect);
         this.colorLinea = color(this.colorObj.h, this.colorObj.s, this.colorObj.b);
     }
+    
 }
 
 class Circulos extends Capa {
@@ -109,8 +110,8 @@ class Lineas extends Capa {
 
 class Meandro {
     constructor(posX, posY, len, ang, paleta, colMeandro, margen, angFactorX, angFactorY, segmentos) {
-        this.x = posX || OBJ / 2;
-        this.y = posY || OBJ / 2;
+        this.x = posX !== undefined ? posX : 0;
+        this.y = posY !== undefined ? posY : 0;
         this.ang = ang || random(PI * 2);
         this.angFactorX = angFactorX > 0 ? angFactorX : selectorFactorAngX();
         this.angFactorY = angFactorY > 0 ? angFactorY : selectorFactorAngY();
@@ -136,8 +137,8 @@ class Meandro {
             let newY = sin(ang) * this.len + y;
 
             // Limitar dentro de la pantalla
-            newX = constrain(newX, this.margen, OBJ - this.margen);
-            newY = constrain(newY, this.margen, OBJ - this.margen);
+            newX = constrain(newX, -OBJ/2 + this.margen, OBJ/2 - this.margen);
+            newY = constrain(newY, -OBJ/2 + this.margen, OBJ/2 - this.margen)
 
             this.puntos.push({ x: newX, y: newY });
 
@@ -191,7 +192,7 @@ class LineaDiscontinua extends Capa {
                 let alto = selectorVal();
                 rect(x, 0, this.anchoRect, alto);
             }
-            rotate(this.ang);
+            rotate(this.angRotate);
         }
         pop();
     }
@@ -202,8 +203,8 @@ class Ojo {
     constructor(ancho, alto, posX, posY, paleta, colOjo, colPupila) {
         this.ancho = ancho;
         this.alto = alto;
-        this.posX = posX || 0;
-        this.posY = posY || 0;
+                this.posX = posX !== undefined ? posX : 0;
+        this.posY = posY !== undefined ? posY : 0;
         this.paleta = paleta !== undefined ? paleta : floor(random(21));
         // Asignar color del ojo
         this.colOjo = colOjo !== undefined ? colOjo : floor(random(5));
@@ -227,7 +228,7 @@ class Ojo {
         fill(this.colorOjo.h, this.colorOjo.s, this.colorOjo.b, 255);
         noStroke();
         push();
-        translate(OBJ / 2 + this.posX, OBJ / 2 + this.posY);
+         translate(this.posX, this.posY);
         beginShape(); // estudiar
         vertex(this.ancho / 2, 0);
         bezierVertex(this.ancho / 4, -this.alto / 2, -this.ancho / 4, -this.alto / 2, -this.ancho / 2, 0);

@@ -4,22 +4,16 @@ let table;
 let OBJ = 100;
 let contadorSvg = 0;
 
-const COLS = 7;
-const ROWS = 4;
-
+let COLS = 7;
+let ROWS = 4;
 let OBJall = [];
-
 
 function preload() {
     table = loadTable("colors.csv", "csv", "header");
 }
 
-
 function setup() {
-
     createCanvas(windowWidth, windowHeight, SVG);
-
-    //createCanvas(600, 600, SVG);
     colorMode(HSB, 360, 100, 100, 255);
     noLoop();
     frameRate(1);
@@ -29,7 +23,7 @@ function setup() {
     noFill();
     smooth(1);
     setInterval(draw, 50000);
-
+    detectarOrientacion();
 }
 
 function draw() {
@@ -37,12 +31,22 @@ function draw() {
     reticulado();
 }
 
+function detectarOrientacion() {
+    if (width >= height) {
+        COLS = 7;
+        ROWS = 4;
+    } else {
+        COLS = 4;
+        ROWS = 7;
+    }
+}
+
 function reticulado() {
-    // OBJ ocupa todo el espacio disponible
+    detectarOrientacion();
+    
     OBJ = Math.min(width / COLS, height / ROWS);
     const MODULO = OBJ;
     
-    // Centrar exactamente
     const totalWidth = COLS * MODULO;
     const totalHeight = ROWS * MODULO;
     const offsetX = (width - totalWidth) / 2;
@@ -51,9 +55,9 @@ function reticulado() {
     OBJall = [];
     for (let x = 0; x < COLS; x++) {
         for (let y = 0; y < ROWS; y++) {
-            // SIN OBJ/2 - la celda comienza en offsetX + x * MODULO
-            const posX = offsetX + x * MODULO ;
-            const posY = offsetY + y * MODULO;
+            // CENTRAR CADA OBJETO EN SU CELDA
+            const posX = offsetX + x * MODULO + OBJ / 2;
+            const posY = offsetY + y * MODULO + OBJ / 2;
             OBJall.push(new Obj(posX, posY));
         }
     }
@@ -63,13 +67,20 @@ function reticulado() {
     });
 }
 
-
-
 function keyPressed() {
-
     if (key == 's') {
         contadorSvg++;
         let nombreSvg = 'exportaciones/' + 'out' + nf(contadorSvg, 3) + '.svg';
         save(nombreSvg);
     }
+    if (key == 'r') {
+        detectarOrientacion();
+        redraw();
+    }
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+    detectarOrientacion();
+    redraw();
 }
