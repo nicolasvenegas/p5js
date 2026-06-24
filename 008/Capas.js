@@ -249,18 +249,22 @@ class Ojo {
 }
 
 class txtH1 {
-    constructor(posX, posY, txt = "LOS OJOS", tSize) {
+    constructor(posX, posY, txt = selectorTxt1(), tSize, paletaTxt, colTxt) {
         // Calcular tamaño para que ocupe todo el ancho
         this.posX = posX !== undefined ? posX : 0;
         this.posY = posY !== undefined ? posY : 0;
         this.txt = txt;
         this.tSize = tSize;  // 28% del ancho para que quepa bien
+        this.paletaTxt = paletaTxt !== undefined ? paletaTxt : floor(random(21));
+        this.colTxt = colTxt !== undefined ? colTxt : floor(random(5));
     }
     render() {
         push();
+        noStroke();
         translate(this.posX, this.posY);
         textAlign(CENTER, CENTER);
-        text(this.txt, random(-OBJ/2+20,OBJ/2-20),random(-OBJ/2+20,OBJ/2-20), this.tSize);
+        textSize(selectorTxtTam());
+        text(this.txt, random(-OBJ / 2 + OBJ / 20, OBJ / 2 - OBJ / 20), random(-OBJ / 2 + OBJ / 20, OBJ / 2 - OBJ / 20), this.tSize);
         pop();
     }
 }

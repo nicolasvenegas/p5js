@@ -44,7 +44,7 @@ const constructorCapas = [
     {
         name: 'txtH1',
         init: () => new txtH1(),
-        weight: 0.3
+        weight: 0.85
     }
 ]
 
@@ -128,10 +128,14 @@ function selectorFactorAngY() {
 }
 
 function selectorTxt1() {
-    //const opciones = [0.1,0.7];
-    //const i = floor(random(opciones.length));
-    //return opciones[i];
-    return random(-0.2, 0.3);
+    const opciones = ["LOS OJOS", "DATOS", "DISEÑO", "CIENCIA", "MULTIMEDIA", "INVESTIGACIÓN", "DIVULGACIÓN", "CONOCIMIENTO"];
+    const i = floor(random(opciones.length));
+    return opciones[i];
+}
+function selectorTxtTam() {
+    const opciones = [12,15,17,20];
+    const i = floor(random(opciones.length));
+    return opciones[i];
 }
 
 
