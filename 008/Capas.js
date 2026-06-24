@@ -1,6 +1,6 @@
 class Capa {
     constructor(valorLinea, tam, lados, posX, posY) {
-                this.posX = posX !== undefined ? posX : 0;
+        this.posX = posX !== undefined ? posX : 0;
         this.posY = posY !== undefined ? posY : 0;
         this.valorLinea = valorLinea > 0 ? valorLinea : selectorVal();
         this.lados = lados > 0 ? lados : selectorLados();
@@ -16,7 +16,7 @@ class Capa {
         this.colorObj = getColor(this.gama, this.colSelect);
         this.colorLinea = color(this.colorObj.h, this.colorObj.s, this.colorObj.b);
     }
-    
+
 }
 
 class Circulos extends Capa {
@@ -137,8 +137,8 @@ class Meandro {
             let newY = sin(ang) * this.len + y;
 
             // Limitar dentro de la pantalla
-            newX = constrain(newX, -OBJ/2 + this.margen, OBJ/2 - this.margen);
-            newY = constrain(newY, -OBJ/2 + this.margen, OBJ/2 - this.margen)
+            newX = constrain(newX, -OBJ / 2 + this.margen, OBJ / 2 - this.margen);
+            newY = constrain(newY, -OBJ / 2 + this.margen, OBJ / 2 - this.margen)
 
             this.puntos.push({ x: newX, y: newY });
 
@@ -203,7 +203,7 @@ class Ojo {
     constructor(ancho, alto, posX, posY, paleta, colOjo, colPupila) {
         this.ancho = ancho;
         this.alto = alto;
-                this.posX = posX !== undefined ? posX : 0;
+        this.posX = posX !== undefined ? posX : 0;
         this.posY = posY !== undefined ? posY : 0;
         this.paleta = paleta !== undefined ? paleta : floor(random(21));
         // Asignar color del ojo
@@ -218,7 +218,6 @@ class Ojo {
             } while (this.colPupila === this.colOjo);
         }
 
-        // Obtener los colores
         this.colorOjo = getColor(this.paleta, this.colOjo);
         this.colorPupila = getColor(this.paleta, this.colPupila);
     }
@@ -228,8 +227,8 @@ class Ojo {
         fill(this.colorOjo.h, this.colorOjo.s, this.colorOjo.b, 255);
         noStroke();
         push();
-         translate(this.posX, this.posY);
-        beginShape(); // estudiar
+        translate(this.posX, this.posY);
+        beginShape(); // estudiar vertex
         vertex(this.ancho / 2, 0);
         bezierVertex(this.ancho / 4, -this.alto / 2, -this.ancho / 4, -this.alto / 2, -this.ancho / 2, 0);
         bezierVertex(-this.ancho / 4, this.alto / 2, this.ancho / 4, this.alto / 2, this.ancho / 2, 0);
@@ -238,8 +237,31 @@ class Ojo {
         fill(this.colorPupila.h, this.colorPupila.s, this.colorPupila.b, 255);
         noStroke();
         ellipse(0, 0, this.alto * 0.65);
+        if (this.colorPupila.b > 50 && this.colorPupila.s < 50) {
+            fill(0, 0, 0, 255);
+        } else {
+            fill(0, 0, 255, 255);
+        }
+        ellipse(0, 0, this.alto * 0.25);
         pop();
         noFill();
+    }
+}
+
+class txtH1 {
+    constructor(posX, posY, txt = "LOS OJOS", tSize) {
+        // Calcular tamaño para que ocupe todo el ancho
+        this.posX = posX !== undefined ? posX : 0;
+        this.posY = posY !== undefined ? posY : 0;
+        this.txt = txt;
+        this.tSize = tSize;  // 28% del ancho para que quepa bien
+    }
+    render() {
+        push();
+        translate(this.posX, this.posY);
+        textAlign(CENTER, CENTER);
+        text(this.txt, random(-OBJ/2+20,OBJ/2-20),random(-OBJ/2+20,OBJ/2-20), this.tSize);
+        pop();
     }
 }
 

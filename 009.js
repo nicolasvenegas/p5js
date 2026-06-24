@@ -1,9 +1,9 @@
 let estaciones = [];
-let margen = 60;
+let margen = 30;
 
 // Límites geográficos de Chile (Norte a Sur)
-const LAT_NORTE = -18;
-const LAT_SUR = -48;
+const LAT_NORTE = -30;
+const LAT_SUR = -42;
 
 // Función para obtener color según concentración y contaminante
 function getColorPorValor(valor, contaminante) {
@@ -52,7 +52,7 @@ let maxConcentracion = 110;
 let maxOriginal = 0;
 
 function setup() {
-  createCanvas(windowWidth*4c, windowHeight);
+  createCanvas(windowWidth, windowHeight);
   loadJSON('https://sinca.mma.gob.cl/index.php/json/listadomapa2k19/', gotData);
 }
 
@@ -183,7 +183,7 @@ function draw() {
     let y = map(item.lat, LAT_NORTE, LAT_SUR, margen, height - margen);
     
     // Tamaño según ICA
-    let tamanio = item.ica > 0 ? map(item.ica, 0, 300, 6, 30) : 12;
+    let tamanio = 3; //item.ica > 0 ? map(item.ica, 0, 300, 2, 10) : 12;
     tamanio = constrain(tamanio, 6, 30);
     
     // --- DIBUJAR CÍRCULO ---
@@ -217,12 +217,12 @@ function draw() {
     textSize(8);
     textAlign(LEFT, CENTER);
     
-    if (x < width - 100) {
+    /* if (x < width - 100) {
       text(item.nombre, x + tamanio/2 + 4, y);
     } else {
       textAlign(RIGHT, CENTER);
       text(item.nombre, x - tamanio/2 - 4, y);
-    }
+    } */
     pop();
   }
 }
