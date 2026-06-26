@@ -262,7 +262,7 @@ class txtH1 {
 
     static obtenerPalabra() {
         if (txtH1.palabrasDisponible.length === 0) {
-            return "SIN PALABRAS";
+            return "cargando";
         }
         let idx = floor(random(txtH1.palabrasDisponible.length));
         let palabra = txtH1.palabrasDisponible[idx];
