@@ -138,7 +138,7 @@ class Meandro {
 
             // Limitar dentro de la pantalla
             newX = constrain(newX, -OBJ / 2 + this.margen, OBJ / 2 - this.margen);
-            newY = constrain(newY, -OBJ / 2 + this.margen, OBJ / 2 - this.margen)
+            newY = constrain(newY, -OBJ / 2 + this.margen, OBJ / 2 - this.margen);
 
             this.puntos.push({ x: newX, y: newY });
 
@@ -156,7 +156,7 @@ class Meandro {
     render() {
         // Obtener color
         getColor(this.paleta, this.colMeandro);
-        stroke(h, 100, 127, 255);
+        stroke(h, s,b, 255);
         strokeWeight(selectorVal());
         noFill();
 
@@ -256,7 +256,7 @@ class txtH1 {
             "LOS OJOS", "DATOS", "DISEÑO", "CIENCIA", "MULTIMEDIA",
             "INVESTIGACIÓN", "DIVULGACIÓN", "CONOCIMIENTO", "TÉCNICA",
             "ANÁLISIS", "FILOSOFÍA", "COMUNICACIÓN", "VISUALIZACIÓN", "INFORMACIÓN",
-            "ESTADÍSTICA", "PROCESAMIENTO", "CREATIVIDAD", "INTERPRETACIÓN", "OBSERVACIÓN", "TECNOLOGÍA", "ESTADÍSTICA", "COMUNICACIÓN", "PROGRAMACIÓN", "INTERDISCIPLINA", "DATASET", "APLICACIONES", "GRÁFICO", "INTERFACE", "SUPERFICIE", "DIGITALIDAD", "OBJETUALIDAD"
+            "ESTADÍSTICA", "PROCESAMIENTO", "CREATIVIDAD", "INTERPRETACIÓN", "OBSERVACIÓN", "TECNOLOGÍA", "ESTADÍSTICA", "COMUNICACIÓN", "PROGRAMACIÓN", "INTERDISCIPLINA", "DATASET", "APLICACIÓN", "GRÁFICOS", "INTERFACE", "SUPERFICIE", "DIGITALIDAD", "OBJETUALIDAD", "INTERACCIÓN", "ARCHIVO", "CAMPO"
         ];
     }
 

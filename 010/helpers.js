@@ -4,7 +4,7 @@ const constructorCapas = [
     {
         name: 'Meandro1',
         init: (intensidad) => new Meandro(0, 0, undefined, undefined, undefined, undefined, undefined, selectorFactorAngX(intensidad), selectorFactorAngY(intensidad), selectorSegmentos(intensidad)),
-        weight: 0.27
+        weight: 0.37
     },
     {
         name: 'Circulos',
@@ -14,7 +14,7 @@ const constructorCapas = [
     {
         name: 'Hexagono',
         init: (intensidad) => new Hexagono(selectorVal(intensidad), selectorTam(intensidad), selectorLados(intensidad)),
-        weight: 0.12
+        weight: 0.17
     },
     {
         name: 'Esfera',
@@ -29,7 +29,7 @@ const constructorCapas = [
     {
         name: 'LineaDiscontinua',
         init: (intensidad) => new LineaDiscontinua(selectorVal(intensidad), selectorTam(intensidad), selectorLados(intensidad)),
-        weight: 0.25
+        weight: 0.35
     },
     {
         name: 'Ojo 1',
@@ -39,12 +39,12 @@ const constructorCapas = [
     {
         name: 'Ojo 2',
         init: () => new Ojo(ojoObj, ojoObj * 0.65, 0, ojoObj * -0.3),
-        weight: 0.055
+        weight: 0.155
     },
     {
         name: 'txtH1',
         init: (intensidad) => new txtH1(0, 0, intensidad, selectorTxtTam(intensidad)),
-        weight: 2
+        weight: 3
     }
 ]
 
@@ -146,7 +146,7 @@ function selectorFactorAngX(intensidad) {
         let max = 0.3 + intensidad * 0.8;  // Hasta 0.8
         return random(min, max);
     }
-    return random(-0.2, 0.3);
+    //return random(-0.2, 0.3);
 }
 function selectorFactorAngY(intensidad) {
     if (intensidad !== undefined) {
@@ -155,7 +155,7 @@ function selectorFactorAngY(intensidad) {
         let max = 0.3 + intensidad * 0.6;  // Hasta 0.9
         return random(min, max);
     }
-    return random(-0.2, 0.3);
+    //return random(-0.2, 0.3);
 }
 
 

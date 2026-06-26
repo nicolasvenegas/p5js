@@ -2,7 +2,7 @@ let table;
 let OBJall = [];
 let intensidades = [];
 let datosEBird = [];
-let datosCargados = false;
+let datosCargados = true;
 
 let COLS = 8;
 let ROWS = 4;
@@ -10,6 +10,8 @@ let OBJ = 100;
 
 let myFont;
 let contadorSvg = 0;
+
+
 
 function preload() {
     table = loadTable("colors.csv", "csv", "header");
@@ -66,7 +68,7 @@ function cargarDatos() {
             inicializarIntensidades();
             if (Array.isArray(datosEBird) && datosEBird.length > 0) {
                 procesarObservaciones();
-                aplicarConvolucion(2);
+                aplicarConvolucion(3);
             } else {
                 console.warn("Datos vacíos. Usando intensidades aleatorias.");
                 for (let x = 0; x < COLS; x++) {
@@ -76,10 +78,10 @@ function cargarDatos() {
                 }
             }
             datosCargados = true;
-                loop();
-                redraw();
-                noLoop();
-  
+            loop();
+            redraw();
+            noLoop();
+
         },
         function (error) {
             console.error("Error cargando JSON:", error);
@@ -132,9 +134,9 @@ function aplicarConvolucion(veces) {
             }
         }
         let kernel = [
-            [1/9, 1/9, 1/9],
-            [1/9, 1/9, 1/9],
-            [1/9, 1/9, 1/9]
+            [1 / 9, 1 / 9, 1 / 9],
+            [1 / 9, 1 / 9, 1 / 9],
+            [1 / 9, 1 / 9, 1 / 9]
         ];
         for (let x = 0; x < COLS; x++) {
             for (let y = 0; y < ROWS; y++) {
@@ -144,7 +146,7 @@ function aplicarConvolucion(veces) {
                         let vecinoX = x + kx;
                         let vecinoY = y + ky;
                         if (vecinoX >= 0 && vecinoX < COLS && vecinoY >= 0 && vecinoY < ROWS) {
-                            suma += copia[vecinoX][vecinoY] * kernel[kx+1][ky+1];
+                            suma += copia[vecinoX][vecinoY] * kernel[kx + 1][ky + 1];
                         }
                     }
                 }
@@ -180,6 +182,7 @@ function reticulado() {
     OBJall.forEach(obj => {
         obj.render();
     });
+
 }
 
 function keyPressed() {
@@ -193,6 +196,7 @@ function keyPressed() {
         cargarDatos();
 
     }
+
 }
 
 function windowResized() {
