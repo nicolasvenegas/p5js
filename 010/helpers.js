@@ -112,7 +112,7 @@ function selectorVal(intensidad) {
     function selectorTam(intensidad) {
   if (intensidad !== undefined) {
     // Mapear intensidad a tamaño entre OBJ*0.3 y OBJ*0.9
-    return OBJ * (0.3 + intensidad * 2 / 3); // rango de 0.3 a 0.9
+    return OBJ * (0.3 + intensidad * 20); // rango de 0.3 a 0.9
   }
   return floor(random(OBJ * 0.5, OBJ));
 }
