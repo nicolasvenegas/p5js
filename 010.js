@@ -1,3 +1,7 @@
+const EBIRD_API_KEY = '94e45nc6e5g6'; // Reemplazar con la clave obtenida
+const EBIRD_URL = 'https://api.ebird.org/v2/data/obs/CL/recent';
+const EBIRD_PARAMS = '?back=10&max=300'; // Últimos 30 días, máximo 300 observaciones
+
 let table;
 let OBJall = [];
 let intensidades = [];
@@ -19,6 +23,7 @@ function preload() {
 }
 
 function setup() {
+    print("Bienvenido :)  Presiona 'r' para recargar datos de eBird y 's' para guardar un SVG.");
     let canvas = createCanvas(windowWidth, windowHeight, SVG);
     canvas.parent('contenedor');
     colorMode(HSB, 360, 100, 100, 255);
@@ -32,18 +37,21 @@ function setup() {
     detectarOrientacion();
     inicializarIntensidades();
     cargarDatos(); // Ahora la carga está en una función
+    
 }
 
 function draw() {
+    
     if (!datosCargados) return;
     background(0, 0, 0, 255);
     reticulado();
+
 }
 
 function detectarOrientacion() {
     if (width >= height) {
-        COLS = 8;
-        ROWS = 4;
+        COLS = 6;
+        ROWS = 3;
     } else {
         COLS = 3;
         ROWS = 5;
@@ -61,42 +69,52 @@ function inicializarIntensidades() {
 }
 
 function cargarDatos() {
-    loadJSON("ebird_sim.json",
-        function (data) {
-            datosEBird = data;
-            console.log("Datos cargados:", datosEBird);
-            inicializarIntensidades();
-            if (Array.isArray(datosEBird) && datosEBird.length > 0) {
-                procesarObservaciones();
-                aplicarConvolucion(3);
-            } else {
-                console.warn("Datos vacíos. Usando intensidades aleatorias.");
-                for (let x = 0; x < COLS; x++) {
-                    for (let y = 0; y < ROWS; y++) {
-                        intensidades[x][y] = random(1);
-                    }
-                }
-            }
-            datosCargados = true;
-            loop();
-            redraw();
-            noLoop();
+    console.log("Consultando API eBird para matriz de convolución... Esto puede tardar unos segundos.");
+    const url = EBIRD_URL + EBIRD_PARAMS;
 
-        },
-        function (error) {
-            console.error("Error cargando JSON:", error);
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'X-eBirdApiToken': EBIRD_API_KEY
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        datosEBird = data;
+        console.log("Datos de eBird cargados:", datosEBird);
+        inicializarIntensidades();
+        if (Array.isArray(datosEBird) && datosEBird.length > 0) {
+            procesarObservaciones();
+            aplicarConvolucion(2);
+        } else {
+            console.warn("Datos vacíos. Usando intensidades aleatorias.");
             for (let x = 0; x < COLS; x++) {
                 for (let y = 0; y < ROWS; y++) {
                     intensidades[x][y] = random(1);
                 }
             }
-            datosCargados = true;
-            loop();
-            redraw();
-            noLoop();
         }
-    );
+        txtH1.reiniciarPalabras();
+        datosCargados = true;
+        redraw();
+    })
+    .catch(error => {
+        console.error("Error cargando eBird:", error);
+        for (let x = 0; x < COLS; x++) {
+            for (let y = 0; y < ROWS; y++) {
+                intensidades[x][y] = random(1);
+            }
+        }
+        datosCargados = true;
+        redraw();
+    });
 }
+
 function procesarObservaciones() {
     if (!Array.isArray(datosEBird) || datosEBird.length === 0) {
         console.warn("datosEBird no es un array o está vacío");
@@ -158,7 +176,6 @@ function aplicarConvolucion(veces) {
 
 function reticulado() {
     detectarOrientacion();
-    txtH1.reiniciarPalabras();
     OBJ = Math.min(width / COLS, height / ROWS);
     const MODULO = OBJ;
     const totalWidth = COLS * MODULO;
@@ -179,10 +196,9 @@ function reticulado() {
         }
     }
 
-    OBJall.forEach(obj => {
-        obj.render();
-    });
+    OBJall.forEach(obj => obj.render());
 
+  
 }
 
 function keyPressed() {

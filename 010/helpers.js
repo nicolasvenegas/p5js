@@ -9,7 +9,7 @@ const constructorCapas = [
     {
         name: 'Circulos',
         init: (intensidad) => new Circulos(selectorVal(intensidad), selectorTam(intensidad) * 0.8, selectorLados(intensidad)),
-        weight: 0.0125
+        weight: 0.125
     },
     {
         name: 'Hexagono',
@@ -34,7 +34,7 @@ const constructorCapas = [
     {
         name: 'Ojo 1',
         init: () => new Ojo(ojoObj, ojoObj * 0.65, 0, ojoObj * 0.3),
-        weight: 0.055
+        weight: 0.155
     },
     {
         name: 'Ojo 2',
@@ -112,7 +112,7 @@ function selectorVal(intensidad) {
 function selectorTam(intensidad) {
     if (intensidad !== undefined) {
         // Mapear intensidad a tamaño entre OBJ*0.3 y OBJ*0.9
-        return OBJ * (0.3 + intensidad * 15); // rango de 0.3 a 0.9
+        return OBJ * (0.3 + intensidad * 7); // rango de 0.3 a 0.9
     }
     return floor(random(OBJ * 0.5, OBJ));
 }

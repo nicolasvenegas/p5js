@@ -256,7 +256,7 @@ class txtH1 {
             "LOS OJOS", "DATOS", "DISEÑO", "CIENCIA", "MULTIMEDIA",
             "INVESTIGACIÓN", "DIVULGACIÓN", "CONOCIMIENTO", "TÉCNICA",
             "ANÁLISIS", "FILOSOFÍA", "COMUNICACIÓN", "VISUALIZACIÓN", "INFORMACIÓN",
-            "ESTADÍSTICA", "PROCESAMIENTO", "CREATIVIDAD", "INTERPRETACIÓN", "OBSERVACIÓN", "TECNOLOGÍA", "ESTADÍSTICA", "COMUNICACIÓN", "PROGRAMACIÓN", "INTERDISCIPLINA", "DATASET", "APLICACIÓN", "GRÁFICOS", "INTERFACE", "SUPERFICIE", "DIGITALIDAD", "OBJETUALIDAD", "INTERACCIÓN", "ARCHIVO", "CAMPO"
+            "ESTADÍSTICA", "PROCESAMIENTO", "CREATIVIDAD", "INTERPRETACIÓN", "OBSERVACIÓN", "TECNOLOGÍA", "ESTADÍSTICA", "COMUNICACIÓN", "PROGRAMACIÓN", "INTERDISCIPLINA", "DATASET", "APLICACIÓN", "GRÁFICOS", "INTERFACE", "SUPERFICIE", "DIGITALIDAD", "OBJETUALIDAD", "INTERACCIÓN", "ARCHIVO", "CAMPO", "MODELADO", "VECTORES", "WEB"
         ];
     }
 
@@ -297,6 +297,30 @@ class txtH1 {
         textAlign(CENTER, CENTER);
         textSize(selectorTxtTam());
         text(this.txt, random(-OBJ / 2 + OBJ / 20, OBJ / 2 - OBJ / 20), random(-OBJ / 2 + OBJ / 20, OBJ / 2 - OBJ / 20), this.tSize);
+        pop();
+    }
+}
+
+class txtOjos {
+    static frase = "Los Ojos";
+
+    constructor(posX, posY, intensidad, tSize, paletaTxt, colTxt) {
+        this.posX = posX !== undefined ? posX : 0;
+        this.posY = posY !== undefined ? posY : 0;
+        this.intensidad = intensidad || 0;
+        this.tSize = tSize || selectorTxtTam();
+        this.paletaTxt = paletaTxt !== undefined ? paletaTxt : floor(random(21));
+        this.colTxt = colTxt !== undefined ? colTxt : floor(random(5));
+
+    }
+
+    render() {
+        push();
+        noStroke();
+        translate(this.posX, this.posY);
+        textAlign(CENTER, CENTER);
+        textSize(selectorTxtTam());
+        text(this.frase, random(-OBJ / 2 + OBJ / 20, OBJ / 2 - OBJ / 20), random(-OBJ / 2 + OBJ / 20, OBJ / 2 - OBJ / 20), this.tSize);
         pop();
     }
 }
