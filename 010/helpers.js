@@ -1,51 +1,51 @@
 const ojoObj = OBJ;
 
 const constructorCapas = [
-  {
-    name: 'Meandro1',
-    init: (intensidad) => new Meandro(0, 0, undefined, undefined, undefined, undefined, undefined, selectorFactorAngX(intensidad), selectorFactorAngY(intensidad), selectorSegmentos(intensidad)),
-    weight: 0.25
-  },
-  {
-    name: 'Circulos',
-    init: (intensidad) => new Circulos(selectorVal(intensidad), selectorTam(intensidad) * 0.8, selectorLados(intensidad)),
-    weight: 0.0125
-  },
-  {
-    name: 'Hexagono',
-    init: (intensidad) => new Hexagono(selectorVal(intensidad), selectorTam(intensidad), selectorLados(intensidad)),
-    weight: 0.15
-  },
-  {
-    name: 'Esfera',
-    init: (intensidad) => new Esfera(selectorVal(intensidad), selectorTam(intensidad)),
-    weight: 0.22
-  },
-  {
-    name: 'Lineas',
-    init: (intensidad) => new Lineas(selectorVal(intensidad), selectorTam(intensidad), selectorLados(intensidad)),
-    weight: 0.25
-  },
-  {
-    name: 'LineaDiscontinua',
-    init: (intensidad) => new LineaDiscontinua(selectorVal(intensidad), selectorTam(intensidad), selectorLados(intensidad)),
-    weight: 0.25
-  },
-  {
-    name: 'Ojo 1',
-    init: () => new Ojo(ojoObj, ojoObj * 0.65, 0, ojoObj * 0.3),
-    weight: 0.055
-  },
-  {
-    name: 'Ojo 2',
-    init: () => new Ojo(ojoObj, ojoObj * 0.65, 0, ojoObj * -0.3),
-    weight: 0.055
-  },
-  {
-    name: 'txtH1',
-    init: (intensidad) => new txtH1(0, 0, selectorTxt1(intensidad), selectorTxtTam(intensidad)),
-    weight: 1
-  }
+    {
+        name: 'Meandro1',
+        init: (intensidad) => new Meandro(0, 0, undefined, undefined, undefined, undefined, undefined, selectorFactorAngX(intensidad), selectorFactorAngY(intensidad), selectorSegmentos(intensidad)),
+        weight: 0.27
+    },
+    {
+        name: 'Circulos',
+        init: (intensidad) => new Circulos(selectorVal(intensidad), selectorTam(intensidad) * 0.8, selectorLados(intensidad)),
+        weight: 0.0125
+    },
+    {
+        name: 'Hexagono',
+        init: (intensidad) => new Hexagono(selectorVal(intensidad), selectorTam(intensidad), selectorLados(intensidad)),
+        weight: 0.12
+    },
+    {
+        name: 'Esfera',
+        init: (intensidad) => new Esfera(selectorVal(intensidad), selectorTam(intensidad)),
+        weight: 0.22
+    },
+    {
+        name: 'Lineas',
+        init: (intensidad) => new Lineas(selectorVal(intensidad), selectorTam(intensidad), selectorLados(intensidad)),
+        weight: 0.25
+    },
+    {
+        name: 'LineaDiscontinua',
+        init: (intensidad) => new LineaDiscontinua(selectorVal(intensidad), selectorTam(intensidad), selectorLados(intensidad)),
+        weight: 0.25
+    },
+    {
+        name: 'Ojo 1',
+        init: () => new Ojo(ojoObj, ojoObj * 0.65, 0, ojoObj * 0.3),
+        weight: 0.055
+    },
+    {
+        name: 'Ojo 2',
+        init: () => new Ojo(ojoObj, ojoObj * 0.65, 0, ojoObj * -0.3),
+        weight: 0.055
+    },
+    {
+        name: 'txtH1',
+        init: (intensidad) => new txtH1(0, 0, intensidad, selectorTxtTam(intensidad)),
+        weight: 2
+    }
 ]
 
 
@@ -64,15 +64,15 @@ function selectorAzar() {
     return opciones[i];
 } */
 function selectorLados(intensidad) {
-  const opciones = [3, 4, 5, 6, 8, 12, 24, 48, 96];
-  if (intensidad !== undefined) {
-    // Usar intensidad para seleccionar un índice más alto
-    const idx = floor(intensidad* 5.5 * (opciones.length - 1));
-    return opciones[idx];
-  }
- /*  const i = floor(random(opciones.length));
-  return opciones[i];
-   */
+    const opciones = [3, 4, 5, 6, 8, 12, 24, 48, 96];
+    if (intensidad !== undefined) {
+        // Usar intensidad para seleccionar un índice más alto
+        const idx = floor(intensidad * 5.5 * (opciones.length - 1));
+        return opciones[idx];
+    }
+    /*  const i = floor(random(opciones.length));
+     return opciones[i];
+      */
 }
 
 function selectorFig() {
@@ -94,11 +94,11 @@ function selectorTrozos() {
 } */
 
 function selectorVal(intensidad) {
-  if (intensidad !== undefined) {
-    // Mapear intensidad (0-1) a grosor (0.5-3)
-    return 0.5 + intensidad * 5;
-  }
-  return 1.2; // valor original
+    if (intensidad !== undefined) {
+        // Mapear intensidad (0-1) a grosor (0.5-3)
+        return 0.5 + intensidad * 5;
+    }
+    return 1.2; // valor original
 }
 
 /* function selectorTam() {
@@ -109,12 +109,12 @@ function selectorVal(intensidad) {
 
 } */
 
-    function selectorTam(intensidad) {
-  if (intensidad !== undefined) {
-    // Mapear intensidad a tamaño entre OBJ*0.3 y OBJ*0.9
-    return OBJ * (0.3 + intensidad * 20); // rango de 0.3 a 0.9
-  }
-  return floor(random(OBJ * 0.5, OBJ));
+function selectorTam(intensidad) {
+    if (intensidad !== undefined) {
+        // Mapear intensidad a tamaño entre OBJ*0.3 y OBJ*0.9
+        return OBJ * (0.3 + intensidad * 15); // rango de 0.3 a 0.9
+    }
+    return floor(random(OBJ * 0.5, OBJ));
 }
 
 function selectorTamLin() {
@@ -140,25 +140,25 @@ function selectorPerimetral() {
 }
 
 function selectorFactorAngX(intensidad) {
-    
-    /* const opciones = [0.1,0.7];
-        const i = floor(random(opciones.length));
-        return opciones[i]; */
+    if (intensidad !== undefined) {
+        // Rango base: [-0.2, 0.3]. Se expande linealmente con la intensidad.
+        let min = -0.2 - intensidad * -0.7; // Hasta -0.7
+        let max = 0.3 + intensidad * 0.8;  // Hasta 0.8
+        return random(min, max);
+    }
+    return random(-0.2, 0.3);
+}
+function selectorFactorAngY(intensidad) {
+    if (intensidad !== undefined) {
+        // Rango base: [-0.2, 0.3]. Se expande con la intensidad.
+        let min = -0.2 - intensidad * 0.6; // Hasta -0.8
+        let max = 0.3 + intensidad * 0.6;  // Hasta 0.9
+        return random(min, max);
+    }
     return random(-0.2, 0.3);
 }
 
-function selectorFactorAngY() {
-    //const opciones = [0.1,0.7];
-    //const i = floor(random(opciones.length));
-    //return opciones[i];
-    return random(-0.2, 0.3);
-}
 
-function selectorTxt1() {
-    const opciones = ["LOS OJOS", "DATOS", "DISEÑO", "CIENCIA", "MULTIMEDIA", "INVESTIGACIÓN", "DIVULGACIÓN", "CONOCIMIENTO"];
-    const i = floor(random(opciones.length));
-    return opciones[i];
-}
 function selectorTxtTam() {
     const opciones = [12, 15, 17, 20];
     const i = floor(random(opciones.length));

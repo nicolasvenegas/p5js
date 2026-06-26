@@ -101,7 +101,7 @@ class Lineas extends Capa {
         translate(this.posX, this.posY);
         rotate(this.ang);
         for (let i = 0; i < this.numFormas; i++) {
-            line(this.linInicio * this.linPaso, 0, this.linFinal * this.linPaso, 0);
+            line(this.linInicio * this.linPaso, 0, this.linFinal * this.linPaso + random(0, width / 8), 0);
             rotate(360 / this.numFormas);
         }
         pop();
@@ -249,15 +249,47 @@ class Ojo {
 }
 
 class txtH1 {
-    constructor(posX, posY, txt = selectorTxt1(), tSize, paletaTxt, colTxt) {
-        // Calcular tamaño para que ocupe todo el ancho
+    static palabrasDisponible = [];
+
+    static reiniciarPalabras() {
+        txtH1.palabrasDisponible = [
+            "LOS OJOS", "DATOS", "DISEÑO", "CIENCIA", "MULTIMEDIA",
+            "INVESTIGACIÓN", "DIVULGACIÓN", "CONOCIMIENTO", "TÉCNICA",
+            "ANÁLISIS", "FILOSOFÍA", "COMUNICACIÓN", "VISUALIZACIÓN", "INFORMACIÓN",
+            "ESTADÍSTICA", "PROCESAMIENTO", "CREATIVIDAD", "INTERPRETACIÓN", "OBSERVACIÓN", "TECNOLOGÍA", "ESTADÍSTICA", "COMUNICACIÓN", "PROGRAMACIÓN", "INTERDISCIPLINA", "DATASET", "APLICACIONES", "GRÁFICO", "INTERFACE", "SUPERFICIE", "DIGITALIDAD", "OBJETUALIDAD"
+        ];
+    }
+
+    static obtenerPalabra() {
+        if (txtH1.palabrasDisponible.length === 0) {
+            return "SIN PALABRAS";
+        }
+        let idx = floor(random(txtH1.palabrasDisponible.length));
+        let palabra = txtH1.palabrasDisponible[idx];
+        txtH1.palabrasDisponible.splice(idx, 1);
+        return palabra;
+    }
+
+    constructor(posX, posY, intensidad, tSize, paletaTxt, colTxt) {
         this.posX = posX !== undefined ? posX : 0;
         this.posY = posY !== undefined ? posY : 0;
-        this.txt = txt;
-        this.tSize = tSize;  // 28% del ancho para que quepa bien
+        this.intensidad = intensidad || 0;
+        this.tSize = tSize || selectorTxtTam();
         this.paletaTxt = paletaTxt !== undefined ? paletaTxt : floor(random(21));
         this.colTxt = colTxt !== undefined ? colTxt : floor(random(5));
+
+        let numTextos = 1;
+        if (this.intensidad > 0.5) numTextos = 2;
+        if (this.intensidad > 0.8) numTextos = 3;
+
+        let textos = [];
+        for (let i = 0; i < numTextos; i++) {
+            let t = txtH1.obtenerPalabra();
+            if (t) textos.push(t);
+        }
+        this.txt = textos.join(' ');
     }
+
     render() {
         push();
         noStroke();
