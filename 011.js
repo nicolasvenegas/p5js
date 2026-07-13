@@ -202,7 +202,7 @@ function mouseMoved() {
     }
   }
 
-  if (mejorDistancia < 30) {
+  if (mejorDistancia < 10) {
     tooltip = mejorObs;
   } else {
     tooltip = null;

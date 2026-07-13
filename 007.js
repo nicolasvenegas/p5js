@@ -1,16 +1,16 @@
 let meandros = [];
 let numMeandros = 3;
 
-// precarga de CSV c/tablas de colores. 
+// precarga de CSV c/tablas de colores.
 // Cada fila son 5 colores H,S,B, H,S,B, H,S,B, H,S,B, H,S,B
 function preload() {
   table = loadTable("colors.csv", "csv", "header");
 }
 
 function setup() {
-    // Crear el canvas y asignarlo al div
+  // Crear el canvas y asignarlo al div
   let canvas = createCanvas(windowWidth, windowHeight);
-  canvas.parent('sketchCanvas'); // 👈 Esto lo mete en el div con ID "sketchCanvas"
+  canvas.parent("sketchCanvas"); // 👈 Esto lo mete en el div con ID "sketchCanvas"
   colorMode(HSB, 360, 100, 100, 255);
   noStroke();
   frameRate(30);
@@ -20,20 +20,18 @@ function setup() {
   // instancias de Meandros: posX, posY, len, ang, paleta, colMeandro, margen
   let m1 = new Meandro(random(width), random(height), width * din, din);
   meandros.push(m1);
-
-   let m2 = new Meandro(random(width), random(height), width * din, din);
+ 
+  let m2 = new Meandro(random(width), random(height), width * din, din);
   meandros.push(m2);
-  
-let m3 = new Meandro(random(width), random(height), width * din, din);
-  meandros.push(m3);
 /*
+  let m3 = new Meandro(random(width), random(height), width * din, din);
+  meandros.push(m3);
+ 
   let m4 = new Meandro(random(width), random(height), width * din, din);
   meandros.push(m4);
 
   let m5 = new Meandro(random(width), random(height), width * din, din);
   meandros.push(m5); */
-
-
 
   // Regenerar meandros cada 10 segundos
   //setInterval(regenerarMeandros, 1000);
@@ -47,7 +45,6 @@ function draw() {
 
   // Dibujar todos los meandros
   for (let i = 0; i < meandros.length; i++) {
-    
     meandros[i].dibujar();
   }
 }
