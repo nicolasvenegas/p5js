@@ -12,6 +12,8 @@ let COLS = 8;
 let ROWS = 4;
 let OBJ = 100;
 
+
+
 let myFont;
 let contadorSvg = 0;
 
@@ -37,11 +39,11 @@ function setup() {
     detectarOrientacion();
     inicializarIntensidades();
     cargarDatos(); // Ahora la carga está en una función
-    
+
 }
 
 function draw() {
-    
+
     if (!datosCargados) return;
     background(0, 0, 0, 255);
     reticulado();
@@ -78,41 +80,41 @@ function cargarDatos() {
             'X-eBirdApiToken': EBIRD_API_KEY
         }
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        datosEBird = data;
-        console.log("Datos de eBird cargados:", datosEBird);
-        inicializarIntensidades();
-        if (Array.isArray(datosEBird) && datosEBird.length > 0) {
-            procesarObservaciones();
-            aplicarConvolucion(2);
-        } else {
-            console.warn("Datos vacíos. Usando intensidades aleatorias.");
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            datosEBird = data;
+            console.log("Datos de eBird cargados:", datosEBird);
+            inicializarIntensidades();
+            if (Array.isArray(datosEBird) && datosEBird.length > 0) {
+                procesarObservaciones();
+                aplicarConvolucion(1);
+            } else {
+                console.warn("Datos vacíos. Usando intensidades aleatorias.");
+                for (let x = 0; x < COLS; x++) {
+                    for (let y = 0; y < ROWS; y++) {
+                        intensidades[x][y] = random(1);
+                    }
+                }
+            }
+            txtH1.reiniciarPalabras();
+            datosCargados = true;
+            redraw();
+        })
+        .catch(error => {
+            console.error("Error cargando eBird:", error);
             for (let x = 0; x < COLS; x++) {
                 for (let y = 0; y < ROWS; y++) {
                     intensidades[x][y] = random(1);
                 }
             }
-        }
-        txtH1.reiniciarPalabras();
-        datosCargados = true;
-        redraw();
-    })
-    .catch(error => {
-        console.error("Error cargando eBird:", error);
-        for (let x = 0; x < COLS; x++) {
-            for (let y = 0; y < ROWS; y++) {
-                intensidades[x][y] = random(1);
-            }
-        }
-        datosCargados = true;
-        redraw();
-    });
+            datosCargados = true;
+            redraw();
+        });
 }
 
 function procesarObservaciones() {
@@ -152,9 +154,9 @@ function aplicarConvolucion(veces) {
             }
         }
         let kernel = [
-            [1 / 9, 1 / 9, 1 / 9],
-            [1 / 9, 1 / 9, 1 / 9],
-            [1 / 9, 1 / 9, 1 / 9]
+            [1 / 16, 2 / 16, 1 / 16],
+            [2 / 16, 4 / 16, 2 / 16],
+            [1 / 16, 2 / 16, 1 / 16]
         ];
         for (let x = 0; x < COLS; x++) {
             for (let y = 0; y < ROWS; y++) {
@@ -178,12 +180,35 @@ function reticulado() {
     detectarOrientacion();
     OBJ = Math.min(width / COLS, height / ROWS);
     const MODULO = OBJ;
-    const totalWidth = COLS * MODULO;
-    const totalHeight = ROWS * MODULO;
+    const totalWidth = COLS * OBJ;
+    const totalHeight = ROWS * OBJ;
     const offsetX = (width - totalWidth) / 2;
     const offsetY = (height - totalHeight) / 2;
+    const paso = OBJ / 8; // 4 veces más denso
 
+    const cellW = width / COLS;
+    const cellH = height / ROWS;
+    const stepX = cellW / 6;
+    const stepY = cellH / 6;
+
+    push();
+    stroke("#ffffff10");
+    strokeWeight(1);
+    // Líneas verticales
+    for (let i = 0; i <= width / stepX; i++) {
+        let xPos = i * stepX;
+        line(xPos, 0, xPos, height);
+    }
+    // Líneas horizontales
+    for (let i = 0; i <= height / stepY; i++) {
+        let yPos = i * stepY;
+        line(0, yPos, width, yPos);
+    }
+    pop();
+    // Resto del código para objetos
     OBJall = [];
+    // hacer OBJall accesible globalmente para canvas ojos
+    window.OBJall = OBJall;
     for (let x = 0; x < COLS; x++) {
         for (let y = 0; y < ROWS; y++) {
             const posX = offsetX + x * MODULO + OBJ / 2;
@@ -195,10 +220,8 @@ function reticulado() {
             OBJall.push(new MiObj(posX, posY, intensidad));
         }
     }
-
     OBJall.forEach(obj => obj.render());
 
-  
 }
 
 function keyPressed() {

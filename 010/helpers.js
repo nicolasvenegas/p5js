@@ -4,22 +4,22 @@ const constructorCapas = [
     {
         name: 'Meandro1',
         init: (intensidad) => new Meandro(0, 0, undefined, undefined, undefined, undefined, undefined, selectorFactorAngX(intensidad), selectorFactorAngY(intensidad), selectorSegmentos(intensidad)),
-        weight: 0.37
+        weight: 0.55
     },
     {
         name: 'Circulos',
-        init: (intensidad) => new Circulos(selectorVal(intensidad), selectorTam(intensidad) * 0.8, selectorLados(intensidad)),
-        weight: 0.125
+        init: (intensidad) => new Circulos(selectorVal(intensidad), selectorTam(intensidad), selectorLados(intensidad)),
+        weight: 0.35
     },
     {
         name: 'Hexagono',
         init: (intensidad) => new Hexagono(selectorVal(intensidad), selectorTam(intensidad), selectorLados(intensidad)),
-        weight: 0.17
+        weight: 0.45
     },
     {
         name: 'Esfera',
         init: (intensidad) => new Esfera(selectorVal(intensidad), selectorTam(intensidad)),
-        weight: 0.22
+        weight: 0.30
     },
     {
         name: 'Lineas',
@@ -29,24 +29,24 @@ const constructorCapas = [
     {
         name: 'LineaDiscontinua',
         init: (intensidad) => new LineaDiscontinua(selectorVal(intensidad), selectorTam(intensidad), selectorLados(intensidad)),
-        weight: 0.35
+        weight: 0.15
     },
     {
         name: 'Ojo 1',
         init: () => new Ojo(ojoObj, ojoObj * 0.65, 0, ojoObj * 0.3),
-        weight: 0.155
+        weight: 0.40
     },
     {
         name: 'Ojo 2',
         init: () => new Ojo(ojoObj, ojoObj * 0.65, 0, ojoObj * -0.3),
-        weight: 0.155
+        weight: 0.40
     },
     {
         name: 'txtH1',
-        init: (intensidad) => new txtH1(0, 0, intensidad, selectorTxtTam(intensidad)),
-        weight: 3
+        init: (intensidad, posX, posY) => new txtH1(posX, posY, intensidad, selectorTxtTam(intensidad)),
+        weight: 0.9
     }
-]
+];
 
 
 function selectorAzar() {
@@ -64,15 +64,14 @@ function selectorAzar() {
     return opciones[i];
 } */
 function selectorLados(intensidad) {
-    const opciones = [3, 4, 5, 6, 8, 12, 24, 48, 96];
+    const opciones = [3, 4, 5, 6, 8];
     if (intensidad !== undefined) {
         // Usar intensidad para seleccionar un índice más alto
-        const idx = floor(intensidad * 5.5 * (opciones.length - 1));
+        const idx = floor(intensidad * (opciones.length - 1) / 5);
         return opciones[idx];
     }
-    /*  const i = floor(random(opciones.length));
-     return opciones[i];
-      */
+    const i = floor(random(opciones.length));
+    return opciones[i];
 }
 
 function selectorFig() {
@@ -112,7 +111,7 @@ function selectorVal(intensidad) {
 function selectorTam(intensidad) {
     if (intensidad !== undefined) {
         // Mapear intensidad a tamaño entre OBJ*0.3 y OBJ*0.9
-        return OBJ * (0.3 + intensidad * 7); // rango de 0.3 a 0.9
+        return OBJ * (0.3 + intensidad * 0.9); // rango de 0.3 a 0.9
     }
     return floor(random(OBJ * 0.5, OBJ));
 }
@@ -146,7 +145,7 @@ function selectorFactorAngX(intensidad) {
         let max = 0.3 + intensidad * 0.8;  // Hasta 0.8
         return random(min, max);
     }
-    //return random(-0.2, 0.3);
+    return random(-0.2, 0.3);
 }
 function selectorFactorAngY(intensidad) {
     if (intensidad !== undefined) {
@@ -160,8 +159,8 @@ function selectorFactorAngY(intensidad) {
 
 
 function selectorTxtTam() {
-    const opciones = [12, 15, 17, 20];
-    const i = floor(random(opciones.length));
+    const opciones = [18, 22, 26, 30];
+    return opciones[floor(random(opciones.length))];
     return opciones[i];
 }
 

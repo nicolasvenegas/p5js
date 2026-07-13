@@ -9,8 +9,8 @@ class MiObj {
                 let picker = random(1);
                 let pesoAjustado = lcon.weight * (0.5 + this.intensidad * 0.5);
                 if (picker < pesoAjustado) {
-                    this.capas.push(lcon.init(this.intensidad));
-                }
+    this.capas.push(lcon.init(this.intensidad, this.x, this.y));
+}
             });
         }
     }

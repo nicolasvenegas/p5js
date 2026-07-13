@@ -123,7 +123,6 @@ class Meandro {
         this.puntos = [];
         this.generarPuntos();
 
-
     }
 
     generarPuntos() {
@@ -187,7 +186,7 @@ class LineaDiscontinua extends Capa {
         push();
         translate(this.posX, this.posY);
         for (let i = 0; i < this.lados; i++) {
-            for (let x = this.paso; x < OBJ * 0.5; x += this.paso) {
+            for (let x = this.paso; x < OBJ * 0.25; x += this.paso) {
                 // Rectángulos más visibles
                 let alto = selectorVal();
                 rect(x, 0, this.anchoRect, alto);
@@ -279,7 +278,7 @@ class txtH1 {
         this.colTxt = colTxt !== undefined ? colTxt : floor(random(5));
 
         let numTextos = 1;
-        if (this.intensidad > 0.5) numTextos = 2;
+        if (this.intensidad > 0.5) numTextos = 1;
         if (this.intensidad > 0.8) numTextos = 3;
 
         let textos = [];
@@ -293,11 +292,13 @@ class txtH1 {
     render() {
         push();
         noStroke();
+        fill(0, 0, 100, 255); // blanco en HSB
         translate(this.posX, this.posY);
         textAlign(CENTER, CENTER);
         textSize(selectorTxtTam());
         text(this.txt, random(-OBJ / 2 + OBJ / 20, OBJ / 2 - OBJ / 20), random(-OBJ / 2 + OBJ / 20, OBJ / 2 - OBJ / 20), this.tSize);
         pop();
+        console.log('txtH1.render() en:', this.posX, this.posY);
     }
 }
 
