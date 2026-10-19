@@ -1,0 +1,433 @@
+<div id="p5sketch-008"></div>
+
+<style>
+#p5sketch-008 {
+    width: 100%;
+    max-width: 100vw;
+    max-height: 100vh;
+    margin: 0 auto;
+    background: #000;
+    border-radius: 0;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+}
+#p5sketch-008 canvas {
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<script src="https://unpkg.com/p5.js-svg@1.6.0"></script>
+
+<script>
+const colorsData = [
+  [61, 87, 96, 66, 89, 94, 72, 91, 91, 77, 93, 89, 83, 95, 87],
+  [238, 59, 100, 238, 59, 100, 238, 59, 100, 280, 36, 100, 295, 33, 100],
+  [185, 77, 82, 199, 68, 69, 211, 62, 62, 230, 55, 55, 256, 63, 48],
+  [333, 75, 88, 283, 36, 71, 230, 36, 81, 206, 57, 90, 197, 73, 100],
+  [273, 65, 87, 173, 86, 69, 271, 100, 27, 37, 100, 100, 26, 100, 100],
+  [346, 70, 94, 42, 60, 100, 164, 97, 84, 195, 90, 70, 195, 91, 30],
+  [207, 97, 15, 100, 1, 100, 174, 77, 77, 353, 87, 91, 35, 89, 100],
+  [209, 87, 40, 48, 19, 98, 47, 61, 96, 28, 68, 93, 10, 78, 98],
+  [344, 74, 27, 354, 66, 55, 353, 67, 70, 6, 29, 99, 19, 26, 100],
+  [39, 74, 100, 338, 92, 85, 335, 69, 56, 178, 75, 51, 187, 48, 87],
+  [90, 2, 32, 1, 62, 95, 48, 60, 100, 198, 78, 63, 170, 42, 76],
+  [4, 64, 93, 147, 55, 83, 100, 47, 96, 42, 51, 100, 11, 48, 100],
+  [37, 69, 93, 352, 65, 82, 188, 100, 55, 207, 66, 56, 200, 100, 36],
+  [202, 87, 33, 186, 94, 55, 207, 18, 92, 358, 65, 100, 357, 86, 78],
+  [7, 62, 93, 57, 23, 96, 172, 20, 76, 184, 46, 66, 87, 5, 92],
+  [20, 53, 98, 16, 62, 100, 344, 49, 81, 328, 46, 60, 326, 40, 36],
+  [357, 67, 80, 1, 62, 85, 0, 48, 87, 1, 34, 89, 6, 25, 89],
+  [181, 82, 82, 0, 0, 100, 24, 12, 99, 17, 64, 100, 349, 65, 92],
+  [234, 67, 100, 232, 53, 100, 232, 53, 100, 218, 25, 100, 184, 11, 100],
+  [179, 40, 95, 345, 16, 100, 50, 38, 100, 100, 35, 98, 143, 49, 95],
+  [356, 80, 85, 159, 69, 44, 128, 31, 76, 56, 23, 96, 17, 54, 26]
+];
+
+const s = function(p) {
+  let h, s_, b;
+  let gama = 0;
+  let OBJ = 100;
+  let contadorSvg = 0;
+  let font;
+  let COLS = 8;
+  let ROWS = 3;
+  let OBJall = [];
+  let tiempoAnimacion = 0;
+  let drawInterval = null;
+
+  const ojoObj = OBJ;
+
+  const constructorCapas = [
+    { name: 'Meandro1', init: () => new Meandro(p), weight: 0.15 },
+    { name: 'Circulos', init: () => new Circulos(p, selectorVal(p), selectorTam(p) * 0.8, selectorLados(p)), weight: 0.015 },
+    { name: 'Hexagono', init: () => new Hexagono(p, selectorVal(p), selectorTam(p), selectorLados(p)), weight: 0.15 },
+    { name: 'Esfera', init: () => new Esfera(p, selectorVal(p), selectorTam(p)), weight: 0.1 },
+    { name: 'Lineas', init: () => new Lineas(p, selectorVal(p), selectorTam(p)), weight: 0.15 },
+    { name: 'LineaDiscontinua', init: () => new LineaDiscontinua(p, selectorVal(p), selectorTam(p), selectorLados(p)), weight: 0.15 },
+    { name: 'Ojo 1', init: () => new Ojo(p, ojoObj, ojoObj * 0.65, 0, ojoObj * 0.3), weight: 0.055 },
+    { name: 'Ojo 2', init: () => new Ojo(p, ojoObj, ojoObj * 0.65, 0, ojoObj * -0.3), weight: 0.055 },
+    { name: 'txtH1', init: () => new txtH1(p), weight: 0.85 }
+  ];
+
+  function selectorAzar() { return p.noise(1) > 0.5; }
+  function selectorLados() { const opts = [3, 4, 5, 6, 8, 12, 24, 48, 96]; return opts[p.floor(p.random(opts.length))]; }
+  function selectorFig() { const opts = [3, 4, 5, 6, 8, 12]; return opts[p.floor(p.random(opts.length))]; }
+  function selectorTrozos() { const opts = [2, 3, 6, 9]; return opts[p.floor(p.random(opts.length))]; }
+  function selectorVal() { return 1.2; }
+  function selectorTam() { return p.floor(p.random(OBJ * 0.5, OBJ)); }
+  function selectorTamLin() { return 2; }
+  function selectorAng() { const opts = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360]; return opts[p.floor(p.random(opts.length))]; }
+  function selectorPerimetral() { const opts = [0, 1, 2, 3]; return opts[p.floor(p.random(opts.length))]; }
+  function selectorFactorAngX() { return p.random(-0.2, 0.3); }
+  function selectorFactorAngY() { return p.random(-0.2, 0.3); }
+  function selectorTxt1() { const opts = ["LOS OJOS", "DATOS", "DISEÑO", "CIENCIA", "MULTIMEDIA", "INVESTIGACIÓN", "DIVULGACIÓN", "CONOCIMIENTO"]; return opts[p.floor(p.random(opts.length))]; }
+  function selectorTxtTam() { const opts = [12, 15, 17, 20]; return opts[p.floor(p.random(opts.length))]; }
+  function selectorSegmentos() { return p.random(10, 400); }
+
+  function getColor(gama, colSelect) {
+    h = p.int(colorsData[gama][colSelect * 3]);
+    s_ = p.int(colorsData[gama][colSelect * 3 + 1]);
+    b = p.int(colorsData[gama][colSelect * 3 + 2]);
+    return { h, s: s_, b };
+  }
+
+  function guias() {
+    let numFormas = 48;
+    const valorLineas = 1;
+    const angLineas = selectorAng();
+    p.noFill();
+    p.strokeWeight(valorLineas);
+    p.stroke("#DDDDDD");
+    p.push();
+    p.translate(p.width / 2, p.height / 2);
+    p.rotate(angLineas);
+    const angle = 360 / numFormas;
+    for (let i = 0; i < numFormas; i++) {
+      p.line(0, 0, 0, OBJ / 2);
+      p.rotate(angle);
+    }
+    p.pop();
+  }
+
+  class Capa {
+    constructor(valorLinea, tam, lados, posX, posY) {
+      this.posX = posX !== undefined ? posX : 0;
+      this.posY = posY !== undefined ? posY : 0;
+      this.valorLinea = valorLinea > 0 ? valorLinea : selectorVal();
+      this.lados = lados > 0 ? lados : selectorLados();
+      this.tam = tam > 0 ? tam : selectorTam();
+      this.pos = (OBJ / 2) - (this.tam / 2);
+      this.pasos = selectorTrozos();
+      this.paso = (OBJ / 2) / this.pasos;
+      this.angRotate = selectorAng();
+      this.ang = 360 / this.lados;
+      this.colSelect = p.floor(p.random(5));
+      this.gama = p.floor(p.random(21));
+      this.colorObj = getColor(this.gama, this.colSelect);
+      this.colorLinea = p.color(this.colorObj.h, this.colorObj.s, this.colorObj.b);
+    }
+  }
+
+  class Circulos extends Capa {
+    constructor(p, valorLinea, tam, lados) { super(valorLinea, tam, lados); this.p = p; }
+    render() {
+      this.p.strokeWeight(this.valorLinea);
+      this.p.stroke(this.colorLinea);
+      this.p.push();
+      this.p.translate(this.posX, this.posY);
+      for (let i = 0; i < this.lados; i++) {
+        this.p.ellipse(this.pos, 0, this.tam);
+        this.p.rotate(this.ang);
+      }
+      this.p.pop();
+    }
+  }
+
+  class Hexagono extends Capa {
+    constructor(p, valorLinea, ang, lados) { super(valorLinea, ang, lados); this.p = p; }
+    render() {
+      this.p.noFill();
+      this.p.strokeWeight(this.valorLinea);
+      this.p.stroke(this.colorLinea);
+      this.p.push();
+      this.p.translate(this.posX, this.posY);
+      this.p.rotate(this.ang);
+      this.p.beginShape();
+      for (let i = 0; i < this.lados; i++) {
+        let angulo = this.ang * i;
+        this.p.vertex((this.tam / 2) * this.p.cos(angulo), (this.tam / 2) * this.p.sin(angulo));
+        this.p.rotate(this.angRotate);
+      }
+      this.p.endShape(this.p.CLOSE);
+      this.p.pop();
+    }
+  }
+
+  class Esfera extends Capa {
+    constructor(p, valorLinea, tam) { super(valorLinea, tam); this.p = p; }
+    render() {
+      this.p.noFill();
+      this.p.strokeWeight(this.valorLinea);
+      this.p.push();
+      this.p.translate(this.posX, this.posY);
+      this.p.ellipse(0, 0, this.tam);
+      this.p.pop();
+    }
+  }
+
+  class Lineas extends Capa {
+    constructor(p, valorLinea, ang, lados) {
+      super(valorLinea, ang, lados); this.p = p;
+      this.linDivisiones = selectorTrozos();
+      this.linPasos = selectorTrozos();
+      this.linPaso = (OBJ / 2) / this.linPasos;
+      this.linInicio = p.floor(p.random(0, this.linPasos));
+      this.linFinal = p.floor(p.random(this.linInicio, this.linPasos + 1));
+      this.numFormas = selectorTrozos();
+      while (this.linFinal - this.linInicio < 2) {
+        this.linInicio = p.floor(p.random(0, this.linPasos - 1));
+        this.linFinal = p.floor(p.random(this.linInicio + 2, this.linPasos + 1));
+      }
+    }
+    render() {
+      this.p.noFill();
+      this.p.strokeWeight(this.valorLinea);
+      this.p.stroke(this.colorLinea);
+      this.p.push();
+      this.p.translate(this.posX, this.posY);
+      this.p.rotate(this.ang);
+      for (let i = 0; i < this.numFormas; i++) {
+        this.p.line(this.linInicio * this.linPaso, 0, this.linFinal * this.linPaso, 0);
+        this.p.rotate(360 / this.numFormas);
+      }
+      this.p.pop();
+    }
+  }
+
+  class Meandro {
+    constructor(p, posX, posY, len, ang, paleta, colMeandro, margen, angFactorX, angFactorY, segmentos) {
+      this.p = p;
+      this.x = posX !== undefined ? posX : 0;
+      this.y = posY !== undefined ? posY : 0;
+      this.ang = ang || p.random(p.PI * 2);
+      this.angFactorX = angFactorX > 0 ? angFactorX : selectorFactorAngX();
+      this.angFactorY = angFactorY > 0 ? angFactorY : selectorFactorAngY();
+      this.segmentos = selectorSegmentos();
+      this.len = len || p.width * 0.009;
+      this.paleta = paleta !== undefined ? paleta : p.floor(p.random(21));
+      this.colMeandro = colMeandro !== undefined ? colMeandro : p.floor(p.random(5));
+      this.margen = margen || 1;
+      this.puntos = [];
+      this.generarPuntos();
+    }
+    generarPuntos() {
+      this.puntos = [];
+      let x = this.x, y = this.y, ang = this.ang;
+      for (let i = 0; i < this.segmentos; i++) {
+        let newX = p.cos(ang) * this.len + x;
+        let newY = p.sin(ang) * this.len + y;
+        newX = p.constrain(newX, -OBJ / 2 + this.margen, OBJ / 2 - this.margen);
+        newY = p.constrain(newY, -OBJ / 2 + this.margen, OBJ / 2 - this.margen);
+        this.puntos.push({ x: newX, y: newY });
+        x = newX; y = newY;
+        ang += p.random(-360 * this.angFactorX, 360 * this.angFactorY);
+      }
+      this.x = x; this.y = y; this.ang = ang;
+    }
+    render() {
+      getColor(this.paleta, this.colMeandro);
+      this.p.stroke(h, 100, 127, 255);
+      this.p.strokeWeight(selectorVal());
+      this.p.noFill();
+      this.p.beginShape();
+      for (let i = 0; i < this.puntos.length; i++) {
+        this.p.curveVertex(this.puntos[i].x, this.puntos[i].y);
+      }
+      this.p.endShape();
+    }
+    regenerar(nuevaPaleta, nuevoColor) {
+      if (nuevaPaleta !== undefined) this.paleta = nuevaPaleta;
+      if (nuevoColor !== undefined) this.colMeandro = nuevoColor;
+      this.generarPuntos();
+    }
+  }
+
+  class LineaDiscontinua extends Capa {
+    constructor(p, valorLinea, tam, lados) {
+      super(valorLinea, tam, lados); this.p = p;
+      this.anchoRect = selectorTrozos();
+    }
+    render() {
+      this.p.fill(this.colorLinea);
+      this.p.noStroke();
+      this.p.push();
+      this.p.translate(this.posX, this.posY);
+      for (let i = 0; i < this.lados; i++) {
+        for (let x = this.paso; x < OBJ * 0.5; x += this.paso) {
+          let alto = selectorVal();
+          this.p.rect(x, 0, this.anchoRect, alto);
+        }
+        this.p.rotate(this.angRotate);
+      }
+      this.p.pop();
+    }
+  }
+
+  class Ojo {
+    constructor(p, ancho, alto, posX, posY, paleta, colOjo, colPupila) {
+      this.p = p;
+      this.ancho = ancho; this.alto = alto;
+      this.posX = posX !== undefined ? posX : 0;
+      this.posY = posY !== undefined ? posY : 0;
+      this.paleta = paleta !== undefined ? paleta : p.floor(p.random(21));
+      this.colOjo = colOjo !== undefined ? colOjo : p.floor(p.random(5));
+      if (colPupila !== undefined) { this.colPupila = colPupila; }
+      else { do { this.colPupila = p.floor(p.random(5)); } while (this.colPupila === this.colOjo); }
+      this.colorOjo = getColor(this.paleta, this.colOjo);
+      this.colorPupila = getColor(this.paleta, this.colPupila);
+    }
+    render() {
+      getColor(this.paleta, this.colOjo);
+      this.p.fill(this.colorOjo.h, this.colorOjo.s, this.colorOjo.b, 255);
+      this.p.noStroke();
+      this.p.push();
+      this.p.translate(this.posX, this.posY);
+      this.p.beginShape();
+      this.p.vertex(this.ancho / 2, 0);
+      this.p.bezierVertex(this.ancho / 4, -this.alto / 2, -this.ancho / 4, -this.alto / 2, -this.ancho / 2, 0);
+      this.p.bezierVertex(-this.ancho / 4, this.alto / 2, this.ancho / 4, this.alto / 2, this.ancho / 2, 0);
+      this.p.endShape(this.p.CLOSE);
+      getColor(this.paleta, this.colPupila);
+      this.p.fill(this.colorPupila.h, this.colorPupila.s, this.colorPupila.b, 255);
+      this.p.noStroke();
+      this.p.ellipse(0, 0, this.alto * 0.65);
+      if (this.colorPupila.b > 50 && this.colorPupila.s < 50) this.p.fill(0, 0, 0, 255);
+      else this.p.fill(0, 0, 255, 255);
+      this.p.ellipse(0, 0, this.alto * 0.25);
+      this.p.pop();
+      this.p.noFill();
+    }
+  }
+
+  class txtH1 {
+    constructor(p, posX, posY, txt = selectorTxt1(), tSize, paletaTxt, colTxt) {
+      this.p = p;
+      this.posX = posX !== undefined ? posX : 0;
+      this.posY = posY !== undefined ? posY : 0;
+      this.txt = txt;
+      this.tSize = tSize;
+      this.paletaTxt = paletaTxt !== undefined ? paletaTxt : p.floor(p.random(21));
+      this.colTxt = colTxt !== undefined ? colTxt : p.floor(p.random(5));
+    }
+    render() {
+      this.p.push();
+      this.p.noStroke();
+      this.p.translate(this.posX, this.posY);
+      this.p.textAlign(this.p.CENTER, this.p.CENTER);
+      const tSize = selectorTxtTam();
+      this.p.textSize(tSize);
+      const tw = this.p.textWidth(this.txt);
+      const margin = OBJ * 0.05;
+      const maxX = OBJ / 2 - margin - tw / 2;
+      const minX = -OBJ / 2 + margin + tw / 2;
+      const safeMaxX = Math.max(minX, maxX);
+      const safeMinX = Math.min(minX, maxX);
+      const tx = p.random(safeMinX, safeMaxX);
+      const ty = p.random(-OBJ / 2 + OBJ / 20, OBJ / 2 - OBJ / 20);
+      this.p.text(this.txt, tx, ty, this.tSize);
+      this.p.pop();
+    }
+  }
+
+  class Obj {
+    constructor(posX, posY) {
+      this.x = posX; this.y = posY; this.capas = [];
+      constructorCapas.forEach(lcon => {
+        let picker = p.random(1);
+        if (picker < lcon.weight) this.capas.push(lcon.init());
+      });
+    }
+    render() {
+      p.push();
+      p.translate(this.x, this.y);
+      this.capas.forEach(capa => { capa.render(); });
+      p.pop();
+    }
+  }
+
+  p.preload = function() {
+    // Usa fuente del sistema, sin carga externa
+  };
+
+  p.setup = function() {
+    let canvas = p.createCanvas(p.windowWidth, p.windowHeight);
+    canvas.parent('p5sketch-008');
+    p.textFont('Courier New');
+    p.textSize(36);
+    p.colorMode(p.HSB, 360, 100, 100, 255);
+    p.noLoop();
+    p.angleMode(p.DEGREES);
+    p.rectMode(p.CENTER);
+    p.ellipseMode(p.CENTER);
+    p.noFill();
+    p.smooth(1);
+    if (!drawInterval) drawInterval = setInterval(() => p.redraw(), 10000);
+    detectarOrientacion(p);
+    p.redraw();
+  };
+
+  p.draw = function() {
+    p.background(0, 0, 0, 255);
+    reticulado(p);
+  };
+
+  function detectarOrientacion(p) {
+    if (p.width >= p.height) { COLS = 8; ROWS = 4; }
+    else { COLS = 4; ROWS = 8; }
+  }
+
+  function reticulado(p) {
+    detectarOrientacion(p);
+    OBJ = Math.min(p.width / COLS, p.height / ROWS);
+    const MODULO = OBJ;
+    const totalWidth = COLS * MODULO;
+    const totalHeight = ROWS * MODULO;
+    const offsetX = (p.width - totalWidth) / 2;
+    const offsetY = (p.height - totalHeight) / 2;
+    OBJall = [];
+    for (let x = 0; x < COLS; x++) {
+      for (let y = 0; y < ROWS; y++) {
+        const posX = offsetX + x * MODULO + OBJ / 2;
+        const posY = offsetY + y * MODULO + OBJ / 2;
+        OBJall.push(new Obj(posX, posY));
+      }
+    }
+    OBJall.forEach(obj => obj.render());
+  }
+
+  p.keyPressed = function() {
+    if (p.key == 's') {
+      contadorSvg++;
+      let nombreSvg = 'exportaciones/out' + p.nf(contadorSvg, 3) + '.svg';
+      p.save(nombreSvg);
+    }
+    if (p.key == 'r') { 
+      detectarOrientacion(p); 
+      if (drawInterval) { clearInterval(drawInterval); drawInterval = setInterval(() => p.redraw(), 10000); }
+      p.redraw(); 
+    }
+  };
+
+  p.windowResized = function() {
+    p.resizeCanvas(p.windowWidth, p.windowHeight);
+    detectarOrientacion(p);
+    if (drawInterval) { clearInterval(drawInterval); drawInterval = setInterval(() => p.redraw(), 10000); }
+    p.redraw();
+  };
+};
+
+new p5(s, 'p5sketch-008');
+</script>

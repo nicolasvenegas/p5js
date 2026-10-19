@@ -4,6 +4,7 @@ let gama = 0;
 let table;
 let OBJ = 100;
 let contadorSvg = 0;
+let font;
 
 let COLS = 8;
 let ROWS = 3;
@@ -13,13 +14,16 @@ let tiempoAnimacion = 0;
 
 function preload() {
     table = loadTable("colors.csv", "csv", "header");
+
 }
 
-function setup() {
+async function setup() {
     // canvas dentro del DIV id 'contenedor'
     let canvas = createCanvas(windowWidth, windowHeight, SVG);
     canvas.parent('contenedor');
-    
+    font = await loadFont('/fonts/terminal-grotesque.ttf');
+    textFont(font);
+  textSize(36);
     colorMode(HSB, 360, 100, 100, 255);
     noLoop();
     frameRate(1);

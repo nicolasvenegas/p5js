@@ -18,7 +18,7 @@ function tituloH1() {
     noStroke();
     textSize(tamaño);
     textAlign(CENTER, CENTER);
-    textFont('Helvetica');
+    textFont(font);
     textStyle(BOLD);
     
     translate(width/2, height/2 + offsetY);
